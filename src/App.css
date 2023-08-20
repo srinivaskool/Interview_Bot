@@ -16,6 +16,7 @@
 
 .chat-section {
   display: flex;
+  position: relative;
   flex-direction: column;
   width: 50vw;
   height: 510px;
@@ -70,7 +71,7 @@
 
 .input-area {
   align-items: center;
-  position: sticky;
+  position: absolute;
   bottom: 0;
   width: 100%;
 }

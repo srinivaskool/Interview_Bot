@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import SpeechRecognition, {
-  useSpeechRecognition
+  useSpeechRecognition,
 } from "react-speech-recognition";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -9,66 +9,52 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatBubble from "./components/ChatBubble";
 import "./App.css";
 
-const user1Messages = [
-  { message: "Hey, how's it going?", timestamp: "09:00 AM", user: "A" },
-  { message: "Did you watch that movie?", timestamp: "09:05 AM", user: "A" },
-  {
-    message: "I'm thinking of ordering some food.",
-    timestamp: "09:10 AM",
-    user: "A"
-  },
-  { message: "Did you watch that movie?", timestamp: "09:15 AM", user: "A" },
-  {
-    message: "I'm thinking of ordering some food.",
-    timestamp: "09:20 AM",
-    user: "A"
-  },
-  { message: "Did you watch that movie?", timestamp: "09:25 AM", user: "A" },
-  {
-    message: "I'm thinking of ordering some food.",
-    timestamp: "09:30 AM",
-    user: "A"
-  }
-];
-
-const user2Messages = [
-  { message: "Hi there!", timestamp: "09:32 AM", user: "B" },
-  {
-    message: "Yes, I watched it. It was amazing!",
-    timestamp: "09:37 AM",
-    user: "B"
-  },
-  { message: "Hi there!", timestamp: "09:42 AM", user: "B" },
-  {
-    message: "Yes, I watched it. It was amazing!",
-    timestamp: "09:47 AM",
-    user: "B"
-  },
-  { message: "Hi there!", timestamp: "09:07 AM", user: "B" },
-  {
-    message: "Yes, I watched it. It was amazing!",
-    timestamp: "10:07 AM",
-    user: "B"
-  },
-  { message: "Sure, what are you craving?", timestamp: "10:12 AM", user: "B" }
-];
-
 const App = () => {
   const [code, setCode] = useState("");
-  const [inputMessage, setInputMessage] = useState(""); // Track user input
-  const [messages, setMessages] = useState([
-    ...user1Messages,
-    ...user2Messages
-  ]);
+  const [humanVoiceLOne, setHumanVoiceLOne] = useState("");
+  const [humanVoiceLTwo, setHumanVoiceLTwo] = useState("");
+  const [humanVoiceLThree, setHumanVoiceLThree] = useState("");
   const chatSectionRef = useRef(null); // Ref to the chat section
   const jumpToBottomButtonRef = useRef(null); // Ref to the "Jump to bottom" button
+  const [loadingMessage, setLoadingMessage] = useState({
+    role: "assistant",
+    content: (
+      <>
+        <FontAwesomeIcon icon="fa-solid fa-spinner" spin spinReverse />
+        <FontAwesomeIcon
+          icon="fa-solid fa-spinner"
+          style={{ margin: "0 10px" }}
+          spinPulse
+        />
+        <FontAwesomeIcon icon="fa-solid fa-spinner" spin spinReverse />
+        <FontAwesomeIcon
+          icon="fa-solid fa-spinner"
+          style={{ margin: "0 10px" }}
+          spinPulse
+        />
+        <FontAwesomeIcon icon="fa-solid fa-spinner" spin spinReverse />
+      </>
+    ),
+  });
+  const [conversation, setConversation] = useState([
+    {
+      role: "system",
+      content:
+        "I want you to act as an interviewer. I will be the candidate and you will ask me coding interview questions for a Junior Software Engineer position. Provide constructive feedback on the candidates answers, offer suggestions for improvement, and discuss techniques for effective communication.Your personality type is friendLy and warm.Limit your responses to 3 sentences.Do not respond with Lists or ask multiple questions at once.End every response with a question to keep the conversation going.I want you to only reply as the interviewer.Do not write all the conversation at once.I want you to only do the interview with me.Ask me the questions and wait for my answers.Do not write explanations.Ask me the questions one by one like an interviewer does and wait for my answers.Ask me random questions from one of the following topics and ask follow- up questions: Data Structure, Algorithm, Operating System, System Design, Network and Security.please dont explain the amswer first say that the answer is wrong and explain the answer in maximum of 1 - 2 lines.While in -between questions dont give the entire answer give pointers like hints and let me guess the answer. You are a job interview partner, assisting someone in preparing for their upcoming job interview. Your task is to simulate a realistic job interview experience. Please validate all my answers and tell its either correct or partially correct or wrong, ls be a little hard on my answers. At a point pls ask only one question. The important thing is dont write the sure line at the start and last line only ask questions , evaluate and answer them. Dont ask the same question again will they couldnt answer it. Start with some theory question like differences between array and linked and basic coding questions like Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.You may assume that each input would have exactly one solution, and you may not use the same element twice. This is important that you always check if the code is optimal and best time complexity otherwise even if the code works tell that its not efficient",
+    },
+    {
+      role: "assistant",
+      content: "Hey there!",
+    },
+  ]);
+  const [timeStamps, SetTimeStamps] = useState([new Date(), new Date()]);
 
   const {
     transcript,
     listening,
     resetTranscript,
     browserSupportsSpeechRecognition,
-    isMicrophoneAvailable
+    isMicrophoneAvailable,
   } = useSpeechRecognition();
 
   if (!browserSupportsSpeechRecognition) {
@@ -81,10 +67,11 @@ const App = () => {
 
   useEffect(() => {
     chatSectionRef.current.scrollTop = chatSectionRef.current.scrollHeight;
-  }, [messages]);
+  }, [conversation]);
 
   useEffect(() => {
-    setInputMessage(transcript);
+    setHumanVoiceLOne(transcript);
+    setHumanVoiceLThree(humanVoiceLTwo + " " + transcript);
   }, [transcript]);
 
   useEffect(() => {
@@ -114,33 +101,114 @@ const App = () => {
   }
 
   function handleInputChange(event) {
-    setInputMessage(event.target.value);
+    setHumanVoiceLThree(event.target.value);
+    setHumanVoiceLOne("");
+    setHumanVoiceLTwo(event.target.value);
   }
 
-  function handleInputSubmit(event) {
+  async function handleInputSubmit(event) {
     event.preventDefault();
     console.log("ayyyy");
-
-    if (inputMessage.trim() !== "") {
-      setMessages([
-        ...messages,
-        { message: inputMessage, timestamp: getCurrentTime(), user: "B" }
-      ]);
-      setInputMessage("");
+    if (humanVoiceLThree.trim() !== "") {
+      const newUserMessage = {
+        role: "user",
+        content: humanVoiceLThree,
+      };
+      const newUserMessageTimeStamp = new Date();
+      setConversation([...conversation, newUserMessage, loadingMessage]);
+      SetTimeStamps([...timeStamps, newUserMessageTimeStamp]);
+      const userReply = humanVoiceLThree;
+      setHumanVoiceLThree("");
+      setHumanVoiceLOne("");
+      setHumanVoiceLTwo("");
+      const totalString = await handleSendMessage(userReply);
+      if (totalString.trim() !== "") {
+        const newAssistantMessage = {
+          role: "assistant",
+          content: totalString,
+        };
+        const newAssistantMessageTimeStamp = new Date();
+        setConversation([...conversation, newUserMessage, newAssistantMessage]);
+        SetTimeStamps([
+          ...timeStamps,
+          newUserMessageTimeStamp,
+          newAssistantMessageTimeStamp,
+        ]);
+      }
     }
-  }
-
-  function getCurrentTime() {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, "0");
-    const minutes = now.getMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
   }
 
   library.add(fas);
   function handleEditorChange(value, event) {
     setCode(value);
   }
+
+  const handleSendMessage = async (method) => {
+    try {
+      let data = method === "Code" ? code : transcript;
+
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer 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`,
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            max_tokens: 100,
+            temperature: 0.7,
+            n: 1,
+            messages: conversation.concat([{ role: "user", content: data }]),
+            stream: true,
+          }),
+        }
+      );
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        console.error("Error: fail to read data from response");
+        return;
+      }
+      let totalString;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+
+        const textDecoder = new TextDecoder("utf-8");
+        const chunk = textDecoder.decode(value);
+
+        let deltaText = "";
+        for (const line of chunk.split("\n")) {
+          const trimmedLine = line.trim();
+          if (!trimmedLine || trimmedLine === "data: [DONE]") {
+            continue;
+          }
+
+          const json = trimmedLine.replace("data: ", "");
+          const obj = JSON.parse(json);
+          const content =
+            obj &&
+            obj.choices &&
+            obj.choices[0] &&
+            obj.choices[0].delta &&
+            obj.choices[0].delta.content
+              ? obj.choices[0].delta.content.toString()
+              : "";
+          deltaText = deltaText.concat(content);
+        }
+        totalString = totalString + deltaText;
+      }
+      return totalString;
+    } catch (error) {
+      console.error("Error:", error);
+      return "";
+    }
+  };
 
   return (
     <div className="app">
@@ -152,14 +220,14 @@ const App = () => {
             <p>You</p>
           </div>
           <div className="chat-bubbles-section" ref={chatSectionRef}>
-            {messages
-              .sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+            {conversation
+              .filter((item) => item.role != "system")
               .map((message, index) => (
                 <ChatBubble
                   key={index}
-                  message={message.message}
-                  sender={message.user === "A" ? "user1" : "user2"}
-                  timestamp={message.timestamp}
+                  message={message.content}
+                  sender={message.role === "assistant" ? "user1" : "user2"}
+                  timeStamp={timeStamps[index + 1]}
                 />
               ))}
             <div
@@ -182,13 +250,16 @@ const App = () => {
                     <FontAwesomeIcon
                       icon="fa-solid fa-microphone-lines"
                       flip
-                      style={{ color: "#000000", transform: "scale(1.5)" }}
+                      style={{ color: "#000000", transform: "scale(2.5)" }}
                       onClick={SpeechRecognition.stopListening}
                     />
                   ) : (
                     <FontAwesomeIcon
                       icon="microphone"
-                      onClick={SpeechRecognition.startListening}
+                      onClick={() => {
+                        setHumanVoiceLTwo(humanVoiceLTwo + humanVoiceLOne);
+                        SpeechRecognition.startListening();
+                      }}
                     />
                   )}
                 </div>
@@ -197,7 +268,7 @@ const App = () => {
                   placeholder="Type a message"
                   className="input-field"
                   autoFocus
-                  value={inputMessage}
+                  value={humanVoiceLThree}
                   onChange={handleInputChange}
                 />
                 <div className="send-icon">
