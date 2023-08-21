@@ -16,6 +16,26 @@ const App = () => {
   const [humanVoiceLThree, setHumanVoiceLThree] = useState("");
   const chatSectionRef = useRef(null); // Ref to the chat section
   const jumpToBottomButtonRef = useRef(null); // Ref to the "Jump to bottom" button
+  const [errorMesssage, setErrorMessage] = useState({
+    role: "assistant",
+    content: (
+      <span style={{ textAligh: "center" }}>
+        <FontAwesomeIcon
+          icon="fa-solid fa-triangle-exclamation"
+          style={{ margin: "0 10px" }}
+          fade
+        />
+        Oops
+        <FontAwesomeIcon
+          icon="fa-solid fa-triangle-exclamation"
+          style={{ margin: "0 10px" }}
+          fade
+        />
+        <br />
+        Somethings' wrong
+      </span>
+    ),
+  });
   const [loadingMessage, setLoadingMessage] = useState({
     role: "assistant",
     content: (
@@ -123,17 +143,8 @@ const App = () => {
       setHumanVoiceLTwo("");
       const totalString = await handleSendMessage(userReply);
       if (totalString.trim() !== "") {
-        const newAssistantMessage = {
-          role: "assistant",
-          content: totalString,
-        };
-        const newAssistantMessageTimeStamp = new Date();
-        setConversation([...conversation, newUserMessage, newAssistantMessage]);
-        SetTimeStamps([
-          ...timeStamps,
-          newUserMessageTimeStamp,
-          newAssistantMessageTimeStamp,
-        ]);
+      } else {
+        setConversation([...conversation, newUserMessage, errorMesssage]);
       }
     }
   }
@@ -146,14 +157,14 @@ const App = () => {
   const handleSendMessage = async (method) => {
     try {
       let data = method === "Code" ? code : transcript;
-
+      let userMessage = method;
       const response = await fetch(
         "https://api.openai.com/v1/chat/completions",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer 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`,
+            Authorization: `Bearer apiKey`,
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
@@ -202,6 +213,23 @@ const App = () => {
           deltaText = deltaText.concat(content);
         }
         totalString = totalString + deltaText;
+        const newUserMessageTimeStamp = new Date();
+        const newUserMessage = {
+          role: "user",
+          content: userMessage,
+        };
+        console.log("dwaraka msg: ", newUserMessage);
+        const newAssistantMessage = {
+          role: "assistant",
+          content: totalString,
+        };
+        const newAssistantMessageTimeStamp = new Date();
+        setConversation([...conversation, newUserMessage, newAssistantMessage]);
+        SetTimeStamps([
+          ...timeStamps,
+          newUserMessageTimeStamp,
+          newAssistantMessageTimeStamp,
+        ]);
       }
       return totalString;
     } catch (error) {
