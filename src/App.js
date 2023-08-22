@@ -69,6 +69,7 @@ const App = () => {
   ]);
   const [timeStamps, SetTimeStamps] = useState([new Date(), new Date()]);
   const [sentences, setSentences] = useState([]);
+  const synth = window.speechSynthesis;
 
   const {
     transcript,
@@ -164,7 +165,7 @@ const App = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer API-key`,
+            Authorization: `Bearer API-Key`,
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
@@ -217,16 +218,23 @@ const App = () => {
         totalString = totalString + deltaText;
 
         currentSentence = currentSentence + deltaText;
-        currentSentence = updateSentences(currentSentence, setSentences);
 
-        updateConversationArrays(
-          userMessage,
-          totalString,
-          setConversation,
-          conversation,
-          SetTimeStamps,
-          timeStamps
+        currentSentence = await updateSentences(
+          currentSentence,
+          setSentences,
+          sentences
         );
+
+        setTimeout(() => {
+          updateConversationArrays(
+            userMessage,
+            totalString,
+            setConversation,
+            conversation,
+            SetTimeStamps,
+            timeStamps
+          );
+        }, 2000);
       }
       console.log("Dwaraka-sentences: ", sentences);
       return totalString;
@@ -358,25 +366,25 @@ function updateConversationArrays(
   ]);
 }
 
-function updateSentences(currentSentence, setSentences) {
+function updateSentences(currentSentence, setSentences, sentences) {
   if (
     currentSentence.includes(".") ||
     currentSentence.includes("?") ||
     currentSentence.includes("!")
   ) {
     let dCurrentSentence = currentSentence + "";
-    setSentences((prevSentences) => [
-      ...prevSentences,
-      dCurrentSentence.includes(".")
-        ? dCurrentSentence.split(".")[0] + "."
-        : "",
-      dCurrentSentence.includes("?")
-        ? dCurrentSentence.split("?")[0] + "?"
-        : "",
-      dCurrentSentence.includes("!")
-        ? dCurrentSentence.split("!")[0] + "!"
-        : "",
-    ]);
+    let newSentence = dCurrentSentence.includes(".")
+      ? dCurrentSentence.split(".")[0] + "."
+      : "" + dCurrentSentence.includes("?")
+      ? dCurrentSentence.split("?")[0] + "?"
+      : "" + dCurrentSentence.includes("!")
+      ? dCurrentSentence.split("!")[0] + "!"
+      : "" + setSentences((prevSentences) => [...prevSentences, newSentence]);
+    setTimeout(() => {
+      const synth = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(newSentence);
+      synth.speak(utterance);
+    }, 2000);
     let d1CurrentSentence = currentSentence + "";
     let d2CurrentSentence =
       (d1CurrentSentence.includes(".") &&
@@ -390,6 +398,7 @@ function updateSentences(currentSentence, setSentences) {
         ? d1CurrentSentence.split("!")[1]
         : "";
     currentSentence = d2CurrentSentence;
+    console.log("Dwaraka-in func: ", sentences);
   }
   return currentSentence;
 }
