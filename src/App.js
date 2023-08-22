@@ -68,6 +68,7 @@ const App = () => {
     },
   ]);
   const [timeStamps, SetTimeStamps] = useState([new Date(), new Date()]);
+  const [sentences, setSentences] = useState([]);
 
   const {
     transcript,
@@ -128,7 +129,6 @@ const App = () => {
 
   async function handleInputSubmit(event) {
     event.preventDefault();
-    console.log("ayyyy");
     if (humanVoiceLThree.trim() !== "") {
       const newUserMessage = {
         role: "user",
@@ -164,7 +164,7 @@ const App = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer apiKey`,
+            Authorization: `Bearer API-key`,
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
@@ -182,7 +182,9 @@ const App = () => {
         console.error("Error: fail to read data from response");
         return;
       }
-      let totalString;
+      let totalString = "";
+
+      let currentSentence = "";
 
       while (true) {
         const { done, value } = await reader.read();
@@ -213,24 +215,20 @@ const App = () => {
           deltaText = deltaText.concat(content);
         }
         totalString = totalString + deltaText;
-        const newUserMessageTimeStamp = new Date();
-        const newUserMessage = {
-          role: "user",
-          content: userMessage,
-        };
-        console.log("dwaraka msg: ", newUserMessage);
-        const newAssistantMessage = {
-          role: "assistant",
-          content: totalString,
-        };
-        const newAssistantMessageTimeStamp = new Date();
-        setConversation([...conversation, newUserMessage, newAssistantMessage]);
-        SetTimeStamps([
-          ...timeStamps,
-          newUserMessageTimeStamp,
-          newAssistantMessageTimeStamp,
-        ]);
+
+        currentSentence = currentSentence + deltaText;
+        currentSentence = updateSentences(currentSentence, setSentences);
+
+        updateConversationArrays(
+          userMessage,
+          totalString,
+          setConversation,
+          conversation,
+          SetTimeStamps,
+          timeStamps
+        );
       }
+      console.log("Dwaraka-sentences: ", sentences);
       return totalString;
     } catch (error) {
       console.error("Error:", error);
@@ -240,6 +238,7 @@ const App = () => {
 
   return (
     <div className="app">
+      {/* {JSON.stringify(sentences)} */}
       <h1 style={{ marginLeft: "20px" }}>Interview Bot</h1>
       <div className="chat-container">
         <div className="chat-section">
@@ -333,3 +332,64 @@ const App = () => {
 };
 
 export default App;
+function updateConversationArrays(
+  userMessage,
+  totalString,
+  setConversation,
+  conversation,
+  SetTimeStamps,
+  timeStamps
+) {
+  const newUserMessageTimeStamp = new Date();
+  const newUserMessage = {
+    role: "user",
+    content: userMessage,
+  };
+  const newAssistantMessage = {
+    role: "assistant",
+    content: totalString,
+  };
+  const newAssistantMessageTimeStamp = new Date();
+  setConversation([...conversation, newUserMessage, newAssistantMessage]);
+  SetTimeStamps([
+    ...timeStamps,
+    newUserMessageTimeStamp,
+    newAssistantMessageTimeStamp,
+  ]);
+}
+
+function updateSentences(currentSentence, setSentences) {
+  if (
+    currentSentence.includes(".") ||
+    currentSentence.includes("?") ||
+    currentSentence.includes("!")
+  ) {
+    let dCurrentSentence = currentSentence + "";
+    setSentences((prevSentences) => [
+      ...prevSentences,
+      dCurrentSentence.includes(".")
+        ? dCurrentSentence.split(".")[0] + "."
+        : "",
+      dCurrentSentence.includes("?")
+        ? dCurrentSentence.split("?")[0] + "?"
+        : "",
+      dCurrentSentence.includes("!")
+        ? dCurrentSentence.split("!")[0] + "!"
+        : "",
+    ]);
+    let d1CurrentSentence = currentSentence + "";
+    let d2CurrentSentence =
+      (d1CurrentSentence.includes(".") &&
+      d1CurrentSentence.split(".").length > 1
+        ? d1CurrentSentence.split(".")[1]
+        : "") + d1CurrentSentence.includes("?") &&
+      d1CurrentSentence.split("?").length > 1
+        ? d1CurrentSentence.split("?")[1]
+        : "" + d1CurrentSentence.includes("!") &&
+          d1CurrentSentence.split("!").length > 1
+        ? d1CurrentSentence.split("!")[1]
+        : "";
+    currentSentence = d2CurrentSentence;
+  }
+  return currentSentence;
+}
