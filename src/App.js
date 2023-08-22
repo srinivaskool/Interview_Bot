@@ -370,7 +370,8 @@ function updateSentences(currentSentence, setSentences, sentences) {
   if (
     currentSentence.includes(".") ||
     currentSentence.includes("?") ||
-    currentSentence.includes("!")
+    currentSentence.includes("!") ||
+    currentSentence.includes(",")
   ) {
     let dCurrentSentence = currentSentence + "";
     let newSentence = dCurrentSentence.includes(".")
@@ -379,6 +380,8 @@ function updateSentences(currentSentence, setSentences, sentences) {
       ? dCurrentSentence.split("?")[0] + "?"
       : "" + dCurrentSentence.includes("!")
       ? dCurrentSentence.split("!")[0] + "!"
+      : dCurrentSentence.includes(",")
+      ? dCurrentSentence.split(",")[0] + ","
       : "" + setSentences((prevSentences) => [...prevSentences, newSentence]);
     setTimeout(() => {
       const synth = window.speechSynthesis;
@@ -396,9 +399,11 @@ function updateSentences(currentSentence, setSentences, sentences) {
         : "" + d1CurrentSentence.includes("!") &&
           d1CurrentSentence.split("!").length > 1
         ? d1CurrentSentence.split("!")[1]
+        : "" + d1CurrentSentence.includes(",") &&
+          d1CurrentSentence.split(",").length > 1
+        ? d1CurrentSentence.split(",")[1]
         : "";
     currentSentence = d2CurrentSentence;
-    console.log("Dwaraka-in func: ", sentences);
   }
   return currentSentence;
 }
