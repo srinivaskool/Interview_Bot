@@ -6,7 +6,9 @@ import SpeechRecognition, {
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Container from "react-bootstrap/Container";
 import ChatBubble from "./components/ChatBubble";
+import NavbarComponent from "./components/Navbar";
 import "./App.css";
 
 const App = () => {
@@ -165,7 +167,7 @@ const App = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer API-Key`,
+            Authorization: `Bearer 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`,
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
@@ -247,94 +249,96 @@ const App = () => {
   return (
     <div className="app">
       {/* {JSON.stringify(sentences)} */}
-      <h1 style={{ marginLeft: "20px" }}>Interview Bot</h1>
-      <div className="chat-container">
-        <div className="chat-section">
-          <div className="subheadings">
-            <p>Bot</p>
-            <p>You</p>
-          </div>
-          <div className="chat-bubbles-section" ref={chatSectionRef}>
-            {conversation
-              .filter((item) => item.role != "system")
-              .map((message, index) => (
-                <ChatBubble
-                  key={index}
-                  message={message.content}
-                  sender={message.role === "assistant" ? "user1" : "user2"}
-                  timeStamp={timeStamps[index + 1]}
+      <Container>
+        <NavbarComponent />
+        <div className="chat-container">
+          <div className="chat-section">
+            <div className="subheadings">
+              <p>Bot</p>
+              <p>You</p>
+            </div>
+            <div className="chat-bubbles-section" ref={chatSectionRef}>
+              {conversation
+                .filter((item) => item.role != "system")
+                .map((message, index) => (
+                  <ChatBubble
+                    key={index}
+                    message={message.content}
+                    sender={message.role === "assistant" ? "user1" : "user2"}
+                    timeStamp={timeStamps[index + 1]}
+                  />
+                ))}
+              <div
+                className="jump-to-bottom-button"
+                ref={jumpToBottomButtonRef}
+                onClick={handleJumpToBottomClick}
+              >
+                <FontAwesomeIcon
+                  icon="fa-solid fa-circle-down"
+                  style={{ color: "#ffffff", marginRight: "5px" }}
                 />
-              ))}
-            <div
-              className="jump-to-bottom-button"
-              ref={jumpToBottomButtonRef}
-              onClick={handleJumpToBottomClick}
-            >
-              <FontAwesomeIcon
-                icon="fa-solid fa-circle-down"
-                style={{ color: "#ffffff", marginRight: "5px" }}
-              />
-              Jump to bottom
+                Jump to bottom
+              </div>
+            </div>
+            <div className="input-area">
+              <form onSubmit={handleInputSubmit}>
+                <div className="input-container">
+                  <div className="microphone-icon">
+                    {listening ? (
+                      <FontAwesomeIcon
+                        icon="fa-solid fa-microphone-lines"
+                        flip
+                        style={{ color: "#000000", transform: "scale(2.5)" }}
+                        onClick={SpeechRecognition.stopListening}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon="microphone"
+                        onClick={() => {
+                          setHumanVoiceLTwo(humanVoiceLTwo + humanVoiceLOne);
+                          SpeechRecognition.startListening();
+                        }}
+                      />
+                    )}
+                  </div>
+                  <textarea
+                    type="text"
+                    placeholder="Type a message"
+                    className="input-field"
+                    autoFocus
+                    value={humanVoiceLThree}
+                    onChange={handleInputChange}
+                  />
+                  <div className="send-icon">
+                    <FontAwesomeIcon
+                      icon="fa-solid fa-angle-right"
+                      onClick={handleInputSubmit}
+                    />
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-          <div className="input-area">
-            <form onSubmit={handleInputSubmit}>
-              <div className="input-container">
-                <div className="microphone-icon">
-                  {listening ? (
-                    <FontAwesomeIcon
-                      icon="fa-solid fa-microphone-lines"
-                      flip
-                      style={{ color: "#000000", transform: "scale(2.5)" }}
-                      onClick={SpeechRecognition.stopListening}
-                    />
-                  ) : (
-                    <FontAwesomeIcon
-                      icon="microphone"
-                      onClick={() => {
-                        setHumanVoiceLTwo(humanVoiceLTwo + humanVoiceLOne);
-                        SpeechRecognition.startListening();
-                      }}
-                    />
-                  )}
-                </div>
-                <textarea
-                  type="text"
-                  placeholder="Type a message"
-                  className="input-field"
-                  autoFocus
-                  value={humanVoiceLThree}
-                  onChange={handleInputChange}
+          <div className="code-section">
+            <Editor
+              value={code}
+              defaultLanguage="cpp"
+              theme="vs-dark"
+              defaultValue={code}
+              onChange={handleEditorChange}
+            />
+            <div style={{ margin: "auto" }}>
+              <center className="send-code-button">
+                Submit code{" "}
+                <FontAwesomeIcon
+                  icon="fa-solid fa-square-caret-right"
+                  style={{ marginLeft: "5px" }}
                 />
-                <div className="send-icon">
-                  <FontAwesomeIcon
-                    icon="fa-solid fa-angle-right"
-                    onClick={handleInputSubmit}
-                  />
-                </div>
-              </div>
-            </form>
+              </center>
+            </div>
           </div>
         </div>
-        <div className="code-section">
-          <Editor
-            value={code}
-            defaultLanguage="cpp"
-            theme="vs-dark"
-            defaultValue={code}
-            onChange={handleEditorChange}
-          />
-          <div style={{ margin: "auto" }}>
-            <center className="send-code-button">
-              Submit code{" "}
-              <FontAwesomeIcon
-                icon="fa-solid fa-square-caret-right"
-                style={{ marginLeft: "5px" }}
-              />
-            </center>
-          </div>
-        </div>
-      </div>
+      </Container>
     </div>
   );
 };
