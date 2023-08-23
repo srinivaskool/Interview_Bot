@@ -41,7 +41,7 @@ const ChatBubble = ({ message, sender, timeStamp }) => {
   }
 
   return (
-    <div className={`chat-container ${alignClass}`}>
+    <div className={`chat-bubble-container ${alignClass}`}>
       {/* {sender === "user2" && (
         <span
           className="icon-container"
