@@ -3,12 +3,16 @@ import React, { useState } from "react";
 import "./ChatBubble.css";
 import TypingEffect from "./TypingEffect";
 
-const ChatBubble = ({ message, sender, timeStamp }) => {
+const ChatBubble = ({ message, sender, timeStamp, scrollToBottomMessage }) => {
   const alignClass = sender === "user1" ? "left" : "right";
   const [speaking, setSpeaking] = useState(false);
 
   const synth = window.speechSynthesis;
   let currentUtterance = null;
+
+  const handelScrollToBottomMessage = () => {
+    scrollToBottomMessage()
+  };
 
   function getCurrentTime(date) {
     const hours = date.getHours().toString().padStart(2, "0");
@@ -56,7 +60,7 @@ const ChatBubble = ({ message, sender, timeStamp }) => {
       )} */}
       <span className={`chat-bubble`}>
         <span className="message-text">
-        {sender === "user1" && timeStamp ?  <TypingEffect textToType={message} /> : message}
+        {sender === "user1" && timeStamp ?  <TypingEffect textToType={message} scrollOnType={handelScrollToBottomMessage}/> : message}
         </span>
         {timeStamp && (
           <span className="timestamp">{getCurrentTime(timeStamp)}</span>

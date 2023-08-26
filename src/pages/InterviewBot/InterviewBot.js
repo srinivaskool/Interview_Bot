@@ -109,8 +109,12 @@ const InterviewBot = ({ history }) => {
   }
 
   useEffect(() => {
-    chatSectionRef.current.scrollTop = chatSectionRef.current.scrollHeight;
+    scrollToBottomMessage()
   }, [conversation]);
+
+  function scrollToBottomMessage(){
+    chatSectionRef.current.scrollTop = chatSectionRef.current.scrollHeight;
+  }
 
   useEffect(() => {
     setHumanVoiceLOne(transcript);
@@ -188,7 +192,7 @@ const InterviewBot = ({ history }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: process.env.REACT_CHATGPT_API_KEY,
+            Authorization: process.env.REACT_APP_CHATGPT_API_KEY,
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
@@ -287,6 +291,7 @@ const InterviewBot = ({ history }) => {
                     message={message.content}
                     sender={message.role === "assistant" ? "user1" : "user2"}
                     timeStamp={timeStamps[index + 1]}
+                    scrollToBottomMessage = {scrollToBottomMessage}
                   />
                 ))}
               <div
@@ -397,7 +402,8 @@ function updateSentences(currentSentence, setSentences, sentences) {
     currentSentence.includes(".") ||
     currentSentence.includes("?") ||
     currentSentence.includes("!") ||
-    currentSentence.includes(",")
+    currentSentence.includes(",") ||
+    currentSentence.includes(":")
   ) {
     let dCurrentSentence = currentSentence + "";
     let newSentence = dCurrentSentence.includes(".")
@@ -408,6 +414,8 @@ function updateSentences(currentSentence, setSentences, sentences) {
       ? dCurrentSentence.split("!")[0] + "!"
       : dCurrentSentence.includes(",")
       ? dCurrentSentence.split(",")[0] + ","
+      : "" + dCurrentSentence.includes(":")
+      ? dCurrentSentence.split(":")[0] + ":"
       : "" + setSentences((prevSentences) => [...prevSentences, newSentence]);
     setTimeout(() => {
       const synth = window.speechSynthesis;
@@ -428,6 +436,9 @@ function updateSentences(currentSentence, setSentences, sentences) {
         : "" + d1CurrentSentence.includes(",") &&
           d1CurrentSentence.split(",").length > 1
         ? d1CurrentSentence.split(",")[1]
+        : "" + d1CurrentSentence.includes(":") &&
+          d1CurrentSentence.split(":").length > 1
+        ? d1CurrentSentence.split(":")[1]
         : "";
     currentSentence = d2CurrentSentence;
   }
