@@ -1,6 +1,7 @@
-import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
 import "./ChatBubble.css";
+import TypingEffect from "./TypingEffect";
 
 const ChatBubble = ({ message, sender, timeStamp }) => {
   const alignClass = sender === "user1" ? "left" : "right";
@@ -54,7 +55,9 @@ const ChatBubble = ({ message, sender, timeStamp }) => {
         </span>
       )} */}
       <span className={`chat-bubble`}>
-        <span className="message-text">{message}</span>
+        <span className="message-text">
+        {sender === "user1" && timeStamp ?  <TypingEffect textToType={message} /> : message}
+        </span>
         {timeStamp && (
           <span className="timestamp">{getCurrentTime(timeStamp)}</span>
         )}

@@ -1,0 +1,110 @@
+.landingPage main {
+  text-align: center;
+}
+
+.landingPage main h1 {
+  color: #333;
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  font-size: 70px;
+  margin-top: 0px;
+  padding-top: 80px;
+  margin-bottom: 80px;
+  text-transform: uppercase;
+}
+
+.landingPage .container {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 10px;
+  text-align: center;
+}
+
+.landingPage .jumbotron {
+  height: 800px;
+  background-image: url("https://content.codecademy.com/projects/broadway/bg.jpg");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.landingPage .btn-main {
+  background-color: #333;
+  color: #fff;
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 1.3px;
+  padding: 16px 40px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.landingPage .btn-default {
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 1.3px;
+  padding: 10px 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.landingPage .supporting {
+  padding-top: 120px;
+  padding-bottom: 100px;
+  margin-bottom: 100px;
+}
+
+.landingPage .supporting .col {
+  font-family: "Raleway", sans-serif;
+  text-align: center;
+  display: inline-block;
+  width: 200px;
+}
+
+.landingPage .supporting img {
+  height: 32px;
+}
+
+.landingPage .supporting h2 {
+  font-weight: 600;
+  font-size: 23px;
+  text-transform: uppercase;
+}
+
+.landingPage .supporting p {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.landingPage .supporting h6 {
+  background-color: white;
+  color: #333333;
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.3px;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 2px solid #333333;
+  cursor: pointer;
+}
+
+@media (max-width: 500px) {
+ .landingPage main h1 {
+    font-size: 50px;
+    padding: 0 40px;
+  }
+
+  .landingPage .supporting .col {
+    width: 100%;
+  }
+}
