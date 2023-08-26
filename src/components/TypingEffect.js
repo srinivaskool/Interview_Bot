@@ -11,7 +11,7 @@ const TypingEffect = ({textToType, scrollOnType}) => {
         setTypedText(prevTypedText => prevTypedText + textToType[currentIndex]);
         setCurrentIndex(prevIndex => prevIndex + 1);
         scrollOnType()
-    }, 50); // Adjust typing speed here
+    }, 45); // Adjust typing speed here
 
     return () => clearTimeout(timer);
     }
@@ -19,7 +19,7 @@ const TypingEffect = ({textToType, scrollOnType}) => {
 
   return (
     <div>
-      <p>{typedText}</p>
+      <p className='m-0'>{typedText}</p>
     </div>
   );
 };

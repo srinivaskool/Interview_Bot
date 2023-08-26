@@ -109,10 +109,10 @@ const InterviewBot = ({ history }) => {
   }
 
   useEffect(() => {
-    scrollToBottomMessage()
+    scrollToBottomMessage();
   }, [conversation]);
 
-  function scrollToBottomMessage(){
+  function scrollToBottomMessage() {
     chatSectionRef.current.scrollTop = chatSectionRef.current.scrollHeight;
   }
 
@@ -185,6 +185,7 @@ const InterviewBot = ({ history }) => {
   const handleSendMessage = async (method) => {
     try {
       let data = method === "Code" ? code : transcript;
+
       let userMessage = method;
       const response = await fetch(
         "https://api.openai.com/v1/chat/completions",
@@ -213,6 +214,8 @@ const InterviewBot = ({ history }) => {
       let totalString = "";
 
       let currentSentence = "";
+      let currentTexSentenceTillNow = "";
+      setSentences([]);
 
       while (true) {
         const { done, value } = await reader.read();
@@ -246,22 +249,28 @@ const InterviewBot = ({ history }) => {
 
         currentSentence = currentSentence + deltaText;
 
-        currentSentence = await updateSentences(
+        const updatedSentences = updateSentences(
           currentSentence,
           setSentences,
           sentences
         );
 
-        setTimeout(() => {
-          updateConversationArrays(
-            userMessage,
-            totalString,
-            setConversation,
-            conversation,
-            SetTimeStamps,
-            timeStamps
-          );
-        }, 2000);
+        currentSentence = updatedSentences.currentSentence;
+
+        if (updatedSentences.newSentence) {
+          currentTexSentenceTillNow += updatedSentences.newSentence;
+
+          setTimeout(() => {
+            updateConversationArrays(
+              userMessage,
+              currentTexSentenceTillNow,
+              setConversation,
+              conversation,
+              SetTimeStamps,
+              timeStamps
+            );
+          }, 2000);
+        }
       }
       console.log("Dwaraka-sentences: ", sentences);
       return totalString;
@@ -291,7 +300,7 @@ const InterviewBot = ({ history }) => {
                     message={message.content}
                     sender={message.role === "assistant" ? "user1" : "user2"}
                     timeStamp={timeStamps[index + 1]}
-                    scrollToBottomMessage = {scrollToBottomMessage}
+                    scrollToBottomMessage={scrollToBottomMessage}
                   />
                 ))}
               <div
@@ -398,6 +407,7 @@ function updateConversationArrays(
 }
 
 function updateSentences(currentSentence, setSentences, sentences) {
+  let newSentence = "";
   if (
     currentSentence.includes(".") ||
     currentSentence.includes("?") ||
@@ -406,17 +416,24 @@ function updateSentences(currentSentence, setSentences, sentences) {
     currentSentence.includes(":")
   ) {
     let dCurrentSentence = currentSentence + "";
-    let newSentence = dCurrentSentence.includes(".")
-      ? dCurrentSentence.split(".")[0] + "."
-      : "" + dCurrentSentence.includes("?")
-      ? dCurrentSentence.split("?")[0] + "?"
-      : "" + dCurrentSentence.includes("!")
-      ? dCurrentSentence.split("!")[0] + "!"
-      : dCurrentSentence.includes(",")
-      ? dCurrentSentence.split(",")[0] + ","
-      : "" + dCurrentSentence.includes(":")
-      ? dCurrentSentence.split(":")[0] + ":"
-      : "" + setSentences((prevSentences) => [...prevSentences, newSentence]);
+    newSentence =
+      (dCurrentSentence.includes(".")
+        ? dCurrentSentence.split(".")[0] + "."
+        : "") +
+      (dCurrentSentence.includes("?")
+        ? dCurrentSentence.split("?")[0] + "?"
+        : "") +
+      (dCurrentSentence.includes("!")
+        ? dCurrentSentence.split("!")[0] + "!"
+        : "") +
+      (dCurrentSentence.includes(",")
+        ? dCurrentSentence.split(",")[0] + ","
+        : "") +
+      (dCurrentSentence.includes(":")
+        ? dCurrentSentence.split(":")[0] + ":"
+        : "");
+    setSentences((prevSentences) => [...prevSentences, newSentence]);
+
     setTimeout(() => {
       const synth = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(newSentence);
@@ -442,5 +459,5 @@ function updateSentences(currentSentence, setSentences, sentences) {
         : "";
     currentSentence = d2CurrentSentence;
   }
-  return currentSentence;
+  return { currentSentence, newSentence };
 }

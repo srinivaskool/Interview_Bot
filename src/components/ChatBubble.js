@@ -66,7 +66,7 @@ const ChatBubble = ({ message, sender, timeStamp, scrollToBottomMessage }) => {
           <span className="timestamp">{getCurrentTime(timeStamp)}</span>
         )}
       </span>
-      {sender === "user1" && (
+      {sender === "user1" && timeStamp && (
         <span className="icon-container">
           {!speaking ? (
             <FontAwesomeIcon
