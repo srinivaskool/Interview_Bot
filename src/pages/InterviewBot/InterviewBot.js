@@ -34,6 +34,7 @@ const InterviewBot = ({ history }) => {
   const [humanVoiceLOne, setHumanVoiceLOne] = useState("");
   const [humanVoiceLTwo, setHumanVoiceLTwo] = useState("");
   const [humanVoiceLThree, setHumanVoiceLThree] = useState("");
+  const [utteranceVoice, setUtteranceVoice] = useState();
   const chatSectionRef = useRef(null); // Ref to the chat section
   const jumpToBottomButtonRef = useRef(null);
 
@@ -155,6 +156,11 @@ const InterviewBot = ({ history }) => {
     setHumanVoiceLTwo(event.target.value);
   }
 
+  const utteranceVoiceChange = (value) => {
+    console.log("Dwaraka-voice-change: ", value.name);
+    setUtteranceVoice(value);
+  };
+
   async function handleInputSubmit(event) {
     event.preventDefault();
     if (humanVoiceLThree.trim() !== "") {
@@ -252,7 +258,7 @@ const InterviewBot = ({ history }) => {
         const updatedSentences = updateSentences(
           currentSentence,
           setSentences,
-          sentences
+          utteranceVoice
         );
 
         currentSentence = updatedSentences.currentSentence;
@@ -282,14 +288,13 @@ const InterviewBot = ({ history }) => {
 
   return (
     <div className="app mt-5 pt-1">
-      {/* {JSON.stringify(sentences)} */}
       <Container>
         <NavBar />
         <div className="chat-container">
           <div className="chat-section">
             <div className="subheadings">
-              <p>Bot</p>
-              <p>You</p>
+              <p className="m-2">Bot <SpeechSynthesisComp utteranceVoiceChange={utteranceVoiceChange} /></p>
+              <p className="m-2">You</p>
             </div>
             <div className="chat-bubbles-section" ref={chatSectionRef}>
               {conversation
@@ -301,6 +306,7 @@ const InterviewBot = ({ history }) => {
                     sender={message.role === "assistant" ? "user1" : "user2"}
                     timeStamp={timeStamps[index + 1]}
                     scrollToBottomMessage={scrollToBottomMessage}
+                    utteranceVoice = {utteranceVoice}
                   />
                 ))}
               <div
@@ -374,7 +380,6 @@ const InterviewBot = ({ history }) => {
           </div>
         </div>
       </Container>
-      <SpeechSynthesisComp />
     </div>
   );
 };
@@ -406,7 +411,7 @@ function updateConversationArrays(
   ]);
 }
 
-function updateSentences(currentSentence, setSentences, sentences) {
+function updateSentences(currentSentence, setSentences, utteranceVoice) {
   let newSentence = "";
   if (
     currentSentence.includes(".") ||
@@ -437,6 +442,9 @@ function updateSentences(currentSentence, setSentences, sentences) {
     setTimeout(() => {
       const synth = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(newSentence);
+      if (utteranceVoice) {
+        utterance.voice = utteranceVoice;
+      }
       synth.speak(utterance);
     }, 2000);
     let d1CurrentSentence = currentSentence + "";

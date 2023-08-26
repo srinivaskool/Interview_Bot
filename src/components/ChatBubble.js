@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./ChatBubble.css";
 import TypingEffect from "./TypingEffect";
 
-const ChatBubble = ({ message, sender, timeStamp, scrollToBottomMessage }) => {
+const ChatBubble = ({ message, sender, timeStamp, scrollToBottomMessage, utteranceVoice }) => {
   const alignClass = sender === "user1" ? "left" : "right";
   const [speaking, setSpeaking] = useState(false);
 
@@ -31,6 +31,7 @@ const ChatBubble = ({ message, sender, timeStamp, scrollToBottomMessage }) => {
     }
     setSpeaking(true);
     const utterance = new SpeechSynthesisUtterance(message);
+    utterance.voice = utteranceVoice
     currentUtterance = utterance;
 
     utterance.onend = () => {
