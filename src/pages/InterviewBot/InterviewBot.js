@@ -163,6 +163,7 @@ const InterviewBot = ({ history }) => {
 
   async function handleInputSubmit(event) {
     event.preventDefault();
+    SpeechRecognition.stopListening();
     if (humanVoiceLThree.trim() !== "") {
       const newUserMessage = {
         role: "user",
@@ -258,7 +259,8 @@ const InterviewBot = ({ history }) => {
         const updatedSentences = updateSentences(
           currentSentence,
           setSentences,
-          utteranceVoice
+          utteranceVoice,
+          synth
         );
 
         currentSentence = updatedSentences.currentSentence;
@@ -293,7 +295,12 @@ const InterviewBot = ({ history }) => {
         <div className="chat-container">
           <div className="chat-section">
             <div className="subheadings">
-              <p className="m-2">Bot <SpeechSynthesisComp utteranceVoiceChange={utteranceVoiceChange} /></p>
+              <p className="m-2">
+                Bot{" "}
+                <SpeechSynthesisComp
+                  utteranceVoiceChange={utteranceVoiceChange}
+                />
+              </p>
               <p className="m-2">You</p>
             </div>
             <div className="chat-bubbles-section" ref={chatSectionRef}>
@@ -306,7 +313,7 @@ const InterviewBot = ({ history }) => {
                     sender={message.role === "assistant" ? "user1" : "user2"}
                     timeStamp={timeStamps[index + 1]}
                     scrollToBottomMessage={scrollToBottomMessage}
-                    utteranceVoice = {utteranceVoice}
+                    utteranceVoice={utteranceVoice}
                   />
                 ))}
               <div
@@ -411,7 +418,7 @@ function updateConversationArrays(
   ]);
 }
 
-function updateSentences(currentSentence, setSentences, utteranceVoice) {
+function updateSentences(currentSentence, setSentences, utteranceVoice, synth) {
   let newSentence = "";
   if (
     currentSentence.includes(".") ||
@@ -440,7 +447,6 @@ function updateSentences(currentSentence, setSentences, utteranceVoice) {
     setSentences((prevSentences) => [...prevSentences, newSentence]);
 
     setTimeout(() => {
-      const synth = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(newSentence);
       if (utteranceVoice) {
         utterance.voice = utteranceVoice;
