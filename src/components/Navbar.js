@@ -2,11 +2,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { getAuth } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./NavBar.css";
 export default function NavBar() {
   const auth = getAuth();
+  let dispatch = useDispatch();
+  let location = useLocation();
+  let navigate = useNavigate();
   const [navstate, setnavstate] = useState(false);
   useEffect(() => {
     window.addEventListener("scroll", changeBackground);
@@ -18,32 +21,28 @@ export default function NavBar() {
       setnavstate(false);
     }
   };
-  let dispatch = useDispatch();
-  let location = useLocation();
-  let navigate = useNavigate();
   // spread operater
   let { user } = useSelector((state) => ({ ...state }));
 
   const logout = async () => {
     try {
-      await auth.signOut(); 
-console.log("location: ", location);
+      await auth.signOut();
       dispatch({
         type: "LOGIN_REDIRECT",
-        payload: location,
-      }); 
-      
+        payload: location.pathname,
+      });
+
       dispatch({
         type: "LOGOUT",
         payload: null,
       });
-      
-      const location = "/login";
+
+      const nextLocation = "/login";
 
       toast.warning(`Logout successful`);
-      navigate(location);
+      navigate(nextLocation);
     } catch (error) {
-      console.error("Logout error:", error);
+      toast.error("Logout error:", error);
     }
   };
   return (
@@ -82,21 +81,21 @@ console.log("location: ", location);
           <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ml-auto nav-flex-icons">
               <li className="nav-item active">
-                <a className="nav-link js-scroll-trigger" href={`/`}>
+                <Link className="nav-link js-scroll-trigger" to={`/`}>
                   HOME
-                </a>
+                </Link>
               </li>
               {/* <li className="nav-item">
-                <a className="nav-link js-scroll-trigger" href={`/aboutus`}>
+                <Link className="nav-link js-scroll-trigger" to={`/aboutus`}>
                   ABOUT US
-                </a>
+                </Link>
               </li> */}
               {!user ? (
                 <>
                   <li className="nav-item">
-                    <a className="nav-link js-scroll-trigger" href={`/login`}>
+                    <Link className="nav-link js-scroll-trigger" to={`/login`}>
                       LOGIN
-                    </a>
+                    </Link>
                   </li>
                 </>
               ) : (
@@ -142,12 +141,15 @@ console.log("location: ", location);
                     >
                       <li className="nav-item ">
                         {user && (
-                          <a onClick={logout} className="nav-link" href={`/login`}>
+                          <Link
+                            onClick={logout}
+                            className="nav-link"
+                            to={`/login`}
+                          >
                             Logout
-                          </a>
+                          </Link>
                         )}
                       </li>
-                      
                     </div>
                   </li>
                 </>

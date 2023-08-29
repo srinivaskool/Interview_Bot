@@ -1,16 +1,111 @@
-.loginh4 {
-    font-size: 1.5rem;
-    text-align: center;
-    text-decoration: underline;
-    height: 36px;
-  }
-  .logintxtdngr {
-    color: #504d48 !important;
-    font-size: 13px;
-    margin-top: -0.5rem;
-    margin-bottom: 1.25rem;
-  }
-  .loginrow {
-    padding: 15px;
-  }
-  
+.tyn-logo {
+  display: inline-flex;
+  height: 40px;
+}
+
+.tyn-root {
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: rgb(219, 234, 254);
+  background-image: none;
+  background-origin: padding-box;
+  background-position-x: 0%;
+  background-position-y: 0%;
+  background-size: auto;
+  box-sizing: border-box;
+  color: rgb(0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 400;
+  height: 321px;
+  line-height: 24px;
+  text-align: start;
+  height: 100vh;
+}
+
+.tyn-auth-centered {
+  display: grid;
+  place-items: center;
+  flex-grow: 1;
+}
+
+.border-top {
+  border-top: var(--bs-border-width) var(--bs-border-style)
+    var(--bs-border-color) !important;
+}
+
+.tyn-title-overline {
+  --overline-color: var(--bs-gray-400);
+  font-size: 0.688rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--overline-color);
+}
+
+.tyn-title-overline {
+  color: rgb(148, 163, 184);
+  font-size: 0.688rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+ol,
+ul,
+dl {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.btn svg,
+.btn .icon {
+  height: var(--tyn-icon-size);
+  width: var(--tyn-icon-size);
+}
+
+img,
+svg {
+  vertical-align: middle;
+  fill: rgb(71, 85, 105);
+  cursor: pointer;
+}
+
+.btn {
+  align-items: center;
+  display: inline-flex;
+  justify-content: space-evenly;
+  letter-spacing: normal;
+}
+
+h6,
+.h6,
+h5,
+.h5,
+h4,
+.h4,
+h3,
+.h3,
+h2,
+.h2,
+h1,
+.h1 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgb(71, 85, 105);
+  font-size: 1.25rem;
+  font-family: Poppins;
+}
+
+.small {
+  color: rgb(100, 116, 139);
+}
+
+.small a {
+    text-decoration: none;
+}

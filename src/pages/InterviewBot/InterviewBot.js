@@ -157,7 +157,6 @@ const InterviewBot = ({ history }) => {
   }
 
   const utteranceVoiceChange = (value) => {
-    console.log("Dwaraka-voice-change: ", value.name);
     setUtteranceVoice(value);
   };
 
@@ -280,7 +279,6 @@ const InterviewBot = ({ history }) => {
           }, 2000);
         }
       }
-      console.log("Dwaraka-sentences: ", sentences);
       return totalString;
     } catch (error) {
       console.error("Error:", error);

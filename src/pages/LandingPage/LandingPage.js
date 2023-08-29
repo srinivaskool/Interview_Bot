@@ -8,7 +8,6 @@ const LandingPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   function updateRedirectRedux(destination) {
-    console.log("destination: ", destination);
     dispatch({
       type: "LOGIN_REDIRECT",
       payload: destination,
