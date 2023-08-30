@@ -1,110 +1,283 @@
-#mainNav {
-    padding-top: 0.3rem !important;
-    padding-bottom: 0.3rem !important;
-  }
-  .navbar-nav li a {
-    color: black;
-  }
-  #navbarResponsive .navbar-nav li a {
-    color: black !important;
-  }
-  #page-top
-    .navbar
-    .container
-    .navbar-shrink
-    .container
-    .nav-bar
-    #navbarResponsive
-    .navbar-nav
-    li
-    a {
-      box-sizing: border-box;
-    color: white !important;
-  }
-  .center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .column {
-    flex-direction: column;
-  }
-  .nav-title {
-    font-size: 10px !important;
-    color: #7f7575 !important;
-  }
-  #mainNav .navbar-toggler {
-    padding: 0.75rem;
-    font-family: "Roboto", sans-serif;
-    font-size: 0.75rem;
-    color: #fff;
-    text-transform: uppercase;
-    background-color: #fdc673;
-    border: 0;
-  }
-  #mainNav .navbar-brand {
-    color: #fed136;
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.0625em;
-    text-transform: uppercase;
-  }
-  #mainNav .navbar-brand img {
-    height: 1.5rem;
-  }
-  #mainNav .navbar-nav .nav-item .nav-link {
-    font-family: "Roboto", sans-serif;
-    font-size: 0.95rem;
-    color: rgb(255, 255, 255);
-    letter-spacing: 0.0625em;
-    box-sizing: border-box;
-  }
+.tyn-appbar {
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: rgb(255, 255, 255);
+  background-image: none;
+  background-origin: padding-box;
+  background-position: 0% 0%;
+  background-repeat: repeat;
+  background-size: auto;
+  border-bottom-color: rgb(219, 234, 254);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  bottom: 238px;
+  box-sizing: border-box;
+  color: rgb(100, 116, 139);
+  display: block;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 400;
+  height: 73px;
+  left: 0px;
+  line-height: 24px;
+  position: fixed;
+  right: 0px;
+  text-align: start;
+  top: 0px;
+  z-index: 1000;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 
-  #mainNav .nav-link:hover {
-    border-bottom: 2px solid gray;
-  }
-  @media (min-width: 992px) {
-    #mainNav {
-      padding-top: 1.5rem;
-      padding-bottom: 1.5rem;
-      border: none;
-      background-color: transparent;
-      transition: padding-top 0.3s ease-in-out, padding-bottom 0.3s ease-in-out;
-    }
-    #mainNav .navbar-brand {
-      font-size: 1.5em;
-      transition: font-size 0.3s ease-in-out;
-    }
-    #mainNav .navbar-brand img {
-      height: 2rem;
-      transition: height 0.3s ease-in-out;
-    }
-    #mainNav.navbar-shrink {
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      background-color: linear-gradient(#fdc46f, #f9deb6);
-    }
-    #mainNav.navbar-shrink .navbar-brand {
-      font-size: 1.25em;
-    }
-    #mainNav.navbar-shrink .navbar-brand svg,
-    #mainNav.navbar-shrink .navbar-brand img {
-      height: 1.5rem;
-    }
-    #mainNav .navbar-nav .nav-item {
-      margin-right: 1rem;
-    }
-    #mainNav .navbar-nav .nav-item:last-child {
-      margin-right: 0;
-    }
-  }
-  .dropdown-menu,
-  .dropdown-menu-right,
-  .dropdown-secondary {
-    background: transparent;
-    text-align: center;
-  }
-  .giftshublogoimg {
-    height: 50px !important;
-  }
-  
+.tyn-appbar-wrap {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  color: rgb(100, 116, 139);
+  display: flex;
+  height: 72px;
+  text-align: start;
+  text-size-adjust: 100%;
+  width: 1497px;
+}
+
+.tyn-appbar-logo {
+  display: inline-flex;
+  border-right: 1px solid var(--border-color);
+  padding: 1rem var(--bs-body-gap-x);
+  border-right-color: rgb(219, 234, 254);
+  border-right-style: solid;
+  border-right-width: 1px;
+  box-sizing: border-box;
+  color: rgb(100, 116, 139);
+  display: flex;
+  height: 72px;
+  padding-bottom: 16px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 16px;
+  text-align: start;
+  width: 92px;
+}
+
+.tyn-logo {
+  display: inline-flex;
+  height: 40px;
+}
+
+.tyn-appbar-content {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  box-sizing: border-box;
+  color: rgb(100, 116, 139);
+  text-align: start;
+  text-size-adjust: 100%;
+  width: 1405px;
+}
+
+.tyn-appbar-nav:first-child {
+  padding-left: 14px;
+}
+
+.tyn-appbar-nav {
+  display: flex;
+  align-items: center;
+}
+
+.tyn-appbar-nav > li {
+  display: inline-flex;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+.tyn-appbar-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(51, 65, 85);
+  background: rgb(226, 232, 240);
+  border-radius: 800px;
+  height: 48px;
+  width: 48px;
+  transition: all 0.3s ease;
+}
+
+.tyn-appbar-link svg {
+  height: 20px;
+  width: 20px;
+}
+
+.me-n1 {
+  margin-right: -0.25rem !important;
+}
+
+.mt-n1 {
+  margin-top: -0.25rem !important;
+}
+.end-0 {
+  right: 0 !important;
+}
+.top-0 {
+  top: 0 !important;
+}
+
+.tyn-appbar-nav:last-child {
+  padding-right: 14px;
+}
+
+.tyn-media img {
+  height: 100%;
+  width: 100%;
+  border-radius: calc(50% - 1px);
+  object-fit: cover;
+}
+
+.tyn-media {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 48px;
+  width: 48px;
+}
+
+.dropdown-menu-end {
+  position: absolute;
+  inset: 0px 0px auto auto;
+  margin: 0px;
+  transform: translate3d(-23px, 70px, 0px);
+}
+
+.dropdown-menu.show {
+  display: block;
+  background-clip: padding-box;
+  background-color: rgb(255, 255, 255);
+  border-bottom-color: rgba(51, 65, 85, 0.176);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-image-outset: 0;
+  border-image-repeat: stretch;
+  border-image-slice: 100%;
+  border-image-source: none;
+  border-image-width: 1;
+  border-left-color: rgba(51, 65, 85, 0.176);
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-right-color: rgba(51, 65, 85, 0.176);
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-top-color: rgba(51, 65, 85, 0.176);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  box-sizing: border-box;
+  color: rgb(100, 116, 139);
+  display: block;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 400;
+  left: 1273.16px;
+  line-height: 24px;
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  min-width: 200px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  position: absolute;
+  right: 0px;
+  text-align: left;
+  top: 0px;
+  transform: matrix(1, 0, 0, 1, -23, 70);
+  width: 238.844px;
+  z-index: 1000;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.dropdown-gap:not(:last-child) {
+  border-bottom: 1px solid rgba(51, 65, 85, 0.176);
+}
+
+.dropdown-gap {
+  padding: 1.125rem 1.25rem;
+}
+
+.tyn-media-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.dropdown-gap .tyn-media img {
+  border-radius: 6px;
+}
+
+.tyn-media-col {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 0.25rem;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.tyn-media-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  max-width: 100%;
+}
+
+.tyn-media-col .name {
+  margin-bottom: 0;
+  color: rgb(100, 116, 139);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+h6, .h6 {
+  font-size: 0.875rem;
+}
+
+.tyn-media-col .content {
+  font-size: 0.75rem;
+  color: var(--media-text);
+  margin-bottom: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tyn-list-links {
+  padding: 0.5rem 0;
+}
+
+.tyn-list-links li {
+  width: 100%;
+}
+.tyn-list-links li a, .tyn-list-links li button:not(.btn) {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 0.675rem;
+  padding: 0.5rem 1.25rem;
+  color: rgb(100, 116, 139);
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+.tyn-list-links li a svg, .tyn-list-links li a .icon, .tyn-list-links li button:not(.btn) svg, .tyn-list-links li button:not(.btn) .icon {
+  height: 1rem;
+  width: 1rem;
+}

@@ -65,7 +65,7 @@ const Login = () => {
   };
 
   return (
-    <div className="tyn-root">
+    <div className="tyn-root tyn-login-page">
       <div className="tyn-content tyn-auth tyn-auth-centered">
         <div className="container">
           <div className="row justify-content-center">
