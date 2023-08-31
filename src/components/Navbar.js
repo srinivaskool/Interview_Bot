@@ -91,7 +91,7 @@ export default function NewNavBar() {
                       style={{ opacity: `${user ? "1" : "0.7"}` }}
                       src={
                         user
-                          ? "https://connectme-html.themeyn.com/images/avatar/3.jpg"
+                          ?  user.profilepic
                           : "https://png.pngtree.com/element_our/sm/20180516/sm_5afc60f232478.png"
                       }
                       alt=""
@@ -106,7 +106,7 @@ export default function NewNavBar() {
                         <div className="tyn-media-group">
                           <div className="tyn-media tyn-size-lg">
                             <img
-                              src="https://connectme-html.themeyn.com/images/avatar/3.jpg"
+                              src= {user.profilepic}
                               alt=""
                             />
                           </div>
@@ -118,7 +118,7 @@ export default function NewNavBar() {
                               </h6>
                             </div>
                             <div className="tyn-media-row has-dot-sap">
-                              <p className="content">Liked that disco music</p>
+                              <p className="content">{user.email}</p>
                             </div>
                           </div>
                         </div>

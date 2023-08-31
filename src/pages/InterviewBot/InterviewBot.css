@@ -4,7 +4,7 @@
 .subheadings {
   display: flex;
   justify-content: space-between;
-  padding: 0 36px;
+  padding: 0 20px;
   background-color: #f0f0f0;
 }
 
@@ -13,16 +13,9 @@
   justify-content: center;
 }
 
-.chat-section {
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  width: 50vw;
-  height: 500px;
+.chat-bubbles-section {
+  height: 476px;
   overflow-y: auto;
-  border-radius: 8px;
-  padding-bottom: 67px;
-  background-color: #ffffff;
 }
 
 .tyn-aside-base + .tyn-main {
@@ -80,11 +73,11 @@
 
 .jump-to-bottom-button {
   font-size: small;
-  position: sticky;
+  position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #007bff;
+  background-color: rgb(37, 99, 235);
   color: white;
   padding: 8px 16px;
   width: fit-content;

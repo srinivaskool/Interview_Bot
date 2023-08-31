@@ -9,6 +9,7 @@ const ChatBubble = ({
   timeStamp,
   scrollToBottomMessage,
   utteranceVoice,
+  user
 }) => {
   const alignClass = sender === "user1" ? "left" : "right";
   const [speaking, setSpeaking] = useState(false);
@@ -69,7 +70,7 @@ const ChatBubble = ({
       <div className="tyn-qa-avatar">
             <div className="tyn-media tyn-size-md">
               <img
-                src= {sender != "user1" ? "https://connectme-html.themeyn.com/images/avatar/1.jpg" : "https://connectme-html.themeyn.com/images/avatar/bot-1.jpg"}
+                src= {sender != "user1" ?  user.profilepic : "https://connectme-html.themeyn.com/images/avatar/bot-1.jpg"}
                 alt=""
               />
             </div>

@@ -295,7 +295,7 @@ const InterviewBot = ({ history }) => {
           <div className=" tyn-main tyn-main-boxed tyn-main-boxed-lg">
             <div className="tyn-chat-body">
               <div className="subheadings">
-                <p className="m-2" onClick={scrollToBottomMessage}>
+                <p className="my-2" onClick={scrollToBottomMessage}>
                   Bot{" "}
                   <SpeechSynthesisComp
                     utteranceVoiceChange={utteranceVoiceChange}
@@ -314,6 +314,7 @@ const InterviewBot = ({ history }) => {
                       timeStamp={timeStamps[index + 1]}
                       scrollToBottomMessage={scrollToBottomMessage}
                       utteranceVoice={utteranceVoice}
+                      user={user}
                     />
                   ))}
                 <div

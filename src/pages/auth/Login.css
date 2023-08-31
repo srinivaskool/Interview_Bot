@@ -37,18 +37,9 @@
 }
 
 .tyn-title-overline {
-  --overline-color: var(--bs-gray-400);
-  font-size: 0.688rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--overline-color);
-}
-
-.tyn-title-overline {
   color: rgb(148, 163, 184);
-  font-size: 0.688rem;
-  font-weight: 700;
+  font-size: 11px;;
+  font-weight: 700 !important;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -79,27 +70,6 @@ svg {
   display: inline-flex;
   justify-content: space-evenly;
   letter-spacing: normal;
-}
-
-.tyn-login-page h6,
-.h6,
-h5,
-.h5,
-h4,
-.h4,
-h3,
-.h3,
-h2,
-.h2,
-h1,
-.h1 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  line-height: 1.4;
-  color: rgb(71, 85, 105);
-  font-size: 1.25rem;
-  font-family: Poppins;
 }
 
 .small {
