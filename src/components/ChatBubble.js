@@ -3,7 +3,13 @@ import React, { useState } from "react";
 import "./ChatBubble.css";
 import TypingEffect from "./TypingEffect";
 
-const ChatBubble = ({ message, sender, timeStamp, scrollToBottomMessage, utteranceVoice }) => {
+const ChatBubble = ({
+  message,
+  sender,
+  timeStamp,
+  scrollToBottomMessage,
+  utteranceVoice,
+}) => {
   const alignClass = sender === "user1" ? "left" : "right";
   const [speaking, setSpeaking] = useState(false);
 
@@ -11,7 +17,7 @@ const ChatBubble = ({ message, sender, timeStamp, scrollToBottomMessage, utteran
   let currentUtterance = null;
 
   const handelScrollToBottomMessage = () => {
-    scrollToBottomMessage()
+    scrollToBottomMessage();
   };
 
   function getCurrentTime(date) {
@@ -31,7 +37,7 @@ const ChatBubble = ({ message, sender, timeStamp, scrollToBottomMessage, utteran
     }
     setSpeaking(true);
     const utterance = new SpeechSynthesisUtterance(message);
-    utterance.voice = utteranceVoice
+    utterance.voice = utteranceVoice;
     currentUtterance = utterance;
 
     utterance.onend = () => {
@@ -60,26 +66,39 @@ const ChatBubble = ({ message, sender, timeStamp, scrollToBottomMessage, utteran
         </span>
       )} */}
       <span className={`chat-bubble`}>
+      <div className="tyn-qa-avatar">
+            <div className="tyn-media tyn-size-md">
+              <img
+                src= {sender != "user1" ? "https://connectme-html.themeyn.com/images/avatar/1.jpg" : "https://connectme-html.themeyn.com/images/avatar/bot-1.jpg"}
+                alt=""
+              />
+            </div>
+          </div>
         <span className="message-text">
-        {sender === "user1" && timeStamp ?  <TypingEffect textToType={message} scrollOnType={handelScrollToBottomMessage}/> : message}
+          {sender === "user1" && timeStamp ? (
+            <TypingEffect
+              textToType={message}
+              scrollOnType={handelScrollToBottomMessage}
+            />
+          ) : (
+            message
+          )}
         </span>
         {timeStamp && (
           <span className="timestamp">{getCurrentTime(timeStamp)}</span>
         )}
       </span>
       {sender === "user1" && timeStamp && (
-        <span className="icon-container">
+        <span className="icon-container speak-icon">
           {!speaking ? (
             <FontAwesomeIcon
               onClick={handleSpeakerClick}
               icon="fa-solid fa-volume-high"
-              style={{ marginLeft: "15px", color: "#535333" }}
             />
           ) : (
             <FontAwesomeIcon
               onClick={handleStopClick}
               icon="fa-solid fa-circle-stop"
-              style={{ marginLeft: "15px", color: "#000" }}
             />
           )}
         </span>

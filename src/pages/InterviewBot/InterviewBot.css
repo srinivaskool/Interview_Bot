@@ -1,120 +1,193 @@
+.tyn-content {
+  margin-top: 73px;
+}
 .subheadings {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 36px;
-    background-color: #f0f0f0;
-  }
-  
-  .chat-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-  }
-  
-  .chat-section {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    width: 50vw;
-    height: 500px;
-    overflow-y: auto;
-    border: 2px solid #ccc;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* margin: 0 20px; */
-    padding-bottom: 67px;
-  }
-  
-  .chat-bubbles-section {
-    padding: 10px 30px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-  }
-  
-  .code-section {
-    display: flex;
-    text-align: initial;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 5px;
-    width: 40vw;
-    height: 500px;
-    border: 2px solid #dcf8c6;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .jump-to-bottom-button {
-    font-size: small;
-    position: sticky;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #007bff;
-    color: white;
-    padding: 8px 16px;
-    width: fit-content;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    opacity: 0;
-    z-index: 1; /* Make sure it's above the chat section */
-  }
-  
-  .jump-to-bottom-button.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-20px);
-  }
-  
-  .input-area {
-    align-items: center;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-  }
-  
-  .input-container {
-    display: flex;
-    align-items: center;
-    background-color: #f0f0f0;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-  }
-  
-  .microphone-icon {
-    font-size: 20px;
-    margin: 0 10px;
-    color: #666666;
-    cursor: pointer;
-  }
-  
-  .input-field {
-    border: none;
-    outline: none;
-    background-color: #ffffff;
-    border-radius: 10px;
-    padding: 8px 12px;
-    flex: 1;
-  }
-  
-  .send-icon {
-    font-size: 20px;
-    margin: 0 10px;
-    color: #666666;
-    cursor: pointer;
-  }
-  
-  .send-code-button {
-    background-color: #dcf8c6;
-    display: inline-block;
-    padding: 8px 16px;
-    width: fit-content;
-    margin-top: 5px;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  padding: 0 36px;
+  background-color: #f0f0f0;
+}
+
+.chat-container {
+  display: flex;
+  justify-content: center;
+}
+
+.chat-section {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 50vw;
+  height: 500px;
+  overflow-y: auto;
+  border-radius: 8px;
+  padding-bottom: 67px;
+  background-color: #ffffff;
+}
+
+.tyn-aside-base + .tyn-main {
+  position: static;
+  opacity: 1;
+  visibility: visible;
+  display: flex;
+  overflow: hidden;
+  background: rgb(219, 234, 254);
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  max-width: 100%;
+  flex-grow: 1;
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tyn-chat-body {
+  height: 516px;
+  overflow: auto;
+  flex-grow: 1;
+  align-content: flex-start;
+  align-items: flex-start;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: rgb(100, 116, 139);
+  display: block;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 400;
+  justify-content: flex-start;
+  line-height: 24px;
+  margin: 24px;
+  position: relative;
+  text-align: start;
+  width: 732px;
+  background-color: rgb(239, 246, 255);
+}
+.code-section {
+  display: flex;
+  text-align: initial;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 5px;
+  width: 40vw;
+  height: 500px;
+  border: 2px solid #dcf8c6;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jump-to-bottom-button {
+  font-size: small;
+  position: sticky;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  width: fit-content;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0;
+  z-index: 1; /* Make sure it's above the chat section */
+}
+
+.jump-to-bottom-button.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-20px);
+}
+
+.input-area {
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.tyn-chat-form {
+  display: flex;
+  align-items: flex-end;
+  background: #ffffff;
+  color: rgb(100, 116, 139);
+  margin: 0 24px 24px 24px;
+  padding: 10px 16px;
+  text-align: start;
+  border-radius: 8px;
+}
+
+.tyn-chat-form-enter {
+  padding: 0;
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-end;
+  align-items: center;
+}
+
+.tyn-chat-form-input {
+  flex-grow: 1;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0);
+  margin-right: 8px;
+  padding: 8px 14px;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  resize: none;
+}
+.input-container {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.input-bar-icon {
+  font-size: 20px;
+  color: #666666;
+  cursor: pointer;
+  height: 52px;
+  width: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 52px;
+}
+
+.input-bar-icon:hover {
+  color: #2563eb;
+  background-color: rgb(191, 219, 254) !important;
+  border-color: rgb(191, 219, 254);
+}
+
+.input-field {
+  border: none;
+  outline: none;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  flex: 1;
+}
+
+.send-code-button {
+  background-color: #dcf8c6;
+  display: inline-block;
+  padding: 8px 16px;
+  width: fit-content;
+  margin-top: 5px;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.tyn-qa-avatar {
+  display: inline-flex;
+  flex-shrink: 0;
+  flex-direction: column;
+}

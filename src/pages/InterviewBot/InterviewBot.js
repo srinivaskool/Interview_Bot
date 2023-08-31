@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Editor from "@monaco-editor/react";
 import { getAuth } from "firebase/auth";
 import React, { useEffect, useRef, useState } from "react";
-import Container from "react-bootstrap/Container";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import SpeechRecognition, {
@@ -114,6 +113,8 @@ const InterviewBot = ({ history }) => {
   }, [conversation]);
 
   function scrollToBottomMessage() {
+    console.log("DWaraka-scrolling-to-bottom, height: ", chatSectionRef.current.scrollHeight);
+    console.log("DWaraka-scrolling-to-bottom, scrollTop: ", chatSectionRef.current.scrollTop);
     chatSectionRef.current.scrollTop = chatSectionRef.current.scrollHeight;
   }
 
@@ -287,79 +288,90 @@ const InterviewBot = ({ history }) => {
   };
 
   return (
-    <div className="app mt-5 pt-1">
-      <Container>
+    <div className="tyn-root">
+      <div className="tyn-content">
         <NavBar />
         <div className="chat-container">
-          <div className="chat-section">
-            <div className="subheadings">
-              <p className="m-2">
-                Bot{" "}
-                <SpeechSynthesisComp
-                  utteranceVoiceChange={utteranceVoiceChange}
-                />
-              </p>
-              <p className="m-2">You</p>
-            </div>
-            <div className="chat-bubbles-section" ref={chatSectionRef}>
-              {conversation
-                .filter((item) => item.role != "system")
-                .map((message, index) => (
-                  <ChatBubble
-                    key={index}
-                    message={message.content}
-                    sender={message.role === "assistant" ? "user1" : "user2"}
-                    timeStamp={timeStamps[index + 1]}
-                    scrollToBottomMessage={scrollToBottomMessage}
-                    utteranceVoice={utteranceVoice}
+          <div className=" tyn-main tyn-main-boxed tyn-main-boxed-lg">
+            <div className="tyn-chat-body">
+              <div className="subheadings">
+                <p className="m-2" onClick={scrollToBottomMessage}>
+                  Bot{" "}
+                  <SpeechSynthesisComp
+                    utteranceVoiceChange={utteranceVoiceChange}
                   />
-                ))}
-              <div
-                className="jump-to-bottom-button"
-                ref={jumpToBottomButtonRef}
-                onClick={handleJumpToBottomClick}
-              >
-                <FontAwesomeIcon
-                  icon="fa-solid fa-circle-down"
-                  style={{ color: "#ffffff", marginRight: "5px" }}
-                />
-                Jump to bottom
+                </p>
+                <p className="m-2">You</p>
+              </div>
+              <div className="chat-bubbles-section" ref={chatSectionRef}>
+                {conversation
+                  .filter((item) => item.role != "system")
+                  .map((message, index) => (
+                    <ChatBubble
+                      key={index}
+                      message={message.content}
+                      sender={message.role === "assistant" ? "user1" : "user2"}
+                      timeStamp={timeStamps[index + 1]}
+                      scrollToBottomMessage={scrollToBottomMessage}
+                      utteranceVoice={utteranceVoice}
+                    />
+                  ))}
+                <div
+                  className="jump-to-bottom-button"
+                  ref={jumpToBottomButtonRef}
+                  onClick={handleJumpToBottomClick}
+                >
+                  <FontAwesomeIcon
+                    icon="fa-solid fa-circle-down"
+                    style={{ color: "#ffffff", marginRight: "5px" }}
+                  />
+                  Jump to bottom
+                </div>
               </div>
             </div>
-            <div className="input-area">
-              <form onSubmit={handleInputSubmit}>
-                <div className="input-container">
-                  <div className="microphone-icon">
+            <div className=" tyn-chat-form">
+              <form onSubmit={handleInputSubmit} style={{ width: "100%" }}>
+                <div className="tyn-chat-form-enter">
+                  <textarea
+                    type="text"
+                    placeholder="Type a message"
+                    className="tyn-chat-form-input"
+                    autoFocus
+                    rows={1}
+                    value={humanVoiceLThree}
+                    onChange={handleInputChange}
+                  />
+                  <div
+                    className="microphone-icon input-bar-icon"
+                    style={{
+                      backgroundColor: `${
+                        listening ? "rgb(191, 219, 254)" : "#fff"
+                      }`,
+                    }}
+                    onClick={() => {
+                      setHumanVoiceLTwo(humanVoiceLTwo + humanVoiceLOne);
+                      SpeechRecognition.startListening();
+                    }}
+                  >
                     {listening ? (
                       <FontAwesomeIcon
                         icon="fa-solid fa-microphone-lines"
                         flip
-                        style={{ color: "#000000", transform: "scale(2.5)" }}
+                        style={{
+                          color: "#2563eb",
+                          transform: "scale(2.5)",
+                        }}
                         onClick={SpeechRecognition.stopListening}
                       />
                     ) : (
-                      <FontAwesomeIcon
-                        icon="microphone"
-                        onClick={() => {
-                          setHumanVoiceLTwo(humanVoiceLTwo + humanVoiceLOne);
-                          SpeechRecognition.startListening();
-                        }}
-                      />
+                      <FontAwesomeIcon icon="microphone" />
                     )}
                   </div>
-                  <textarea
-                    type="text"
-                    placeholder="Type a message"
-                    className="input-field"
-                    autoFocus
-                    value={humanVoiceLThree}
-                    onChange={handleInputChange}
-                  />
-                  <div className="send-icon">
-                    <FontAwesomeIcon
-                      icon="fa-solid fa-angle-right"
-                      onClick={handleInputSubmit}
-                    />
+                  <div
+                    className="send-icon input-bar-icon"
+                    onClick={handleInputSubmit}
+                  >
+                    <FontAwesomeIcon icon="fa-solid fa-paper-plane" />
                   </div>
                 </div>
               </form>
@@ -384,7 +396,7 @@ const InterviewBot = ({ history }) => {
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </div>
   );
 };
