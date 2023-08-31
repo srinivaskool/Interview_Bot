@@ -13,6 +13,7 @@ import ChatBubble from "../../components/ChatBubble";
 import NavBar from "../../components/NavBar";
 import SpeechSynthesisComp from "../../components/SpeechSynthesisComp";
 
+import { toast } from "react-toastify";
 import "./InterviewBot.css";
 
 const InterviewBot = ({ history }) => {
@@ -30,6 +31,8 @@ const InterviewBot = ({ history }) => {
   }, [navigate, user]);
 
   const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  // const [loadingTrackerInt, setLoadingTrackerInt] = useState(0);
   const [humanVoiceLOne, setHumanVoiceLOne] = useState("");
   const [humanVoiceLTwo, setHumanVoiceLTwo] = useState("");
   const [humanVoiceLThree, setHumanVoiceLThree] = useState("");
@@ -113,8 +116,6 @@ const InterviewBot = ({ history }) => {
   }, [conversation]);
 
   function scrollToBottomMessage() {
-    console.log("DWaraka-scrolling-to-bottom, height: ", chatSectionRef.current.scrollHeight);
-    console.log("DWaraka-scrolling-to-bottom, scrollTop: ", chatSectionRef.current.scrollTop);
     chatSectionRef.current.scrollTop = chatSectionRef.current.scrollHeight;
   }
 
@@ -123,6 +124,17 @@ const InterviewBot = ({ history }) => {
     setHumanVoiceLThree(humanVoiceLTwo + " " + transcript);
   }, [transcript]);
 
+  // useEffect(() => {
+  //   console.log("dwaraka loadint changed in useeffect");
+  //   if (loadingTrackerInt < 0) {
+  //     console.log("dwaraka loadint changed in useeffect decrease");
+  //     setLoading(true);
+  //   } else {
+  //     console.log("dwaraka loadint changed in useeffect increased");
+  //     setLoading(false);
+  //   }
+  // }, [loadingTrackerInt]);
+
   useEffect(() => {
     // Display the "Jump to bottom" button if scrolled up
     const handleScroll = () => {
@@ -130,7 +142,7 @@ const InterviewBot = ({ history }) => {
         chatSectionRef.current.scrollTop <
         chatSectionRef.current.scrollHeight -
           chatSectionRef.current.clientHeight -
-          150
+          100
       ) {
         jumpToBottomButtonRef.current.classList.add("show");
       } else {
@@ -190,6 +202,7 @@ const InterviewBot = ({ history }) => {
   }
 
   const handleSendMessage = async (method) => {
+    setLoading(true);
     try {
       let data = method === "Code" ? code : transcript;
 
@@ -260,7 +273,9 @@ const InterviewBot = ({ history }) => {
           currentSentence,
           setSentences,
           utteranceVoice,
-          synth
+          synth,
+          // setLoadingTrackerInt,
+          // loadingTrackerInt
         );
 
         currentSentence = updatedSentences.currentSentence;
@@ -280,9 +295,12 @@ const InterviewBot = ({ history }) => {
           }, 2000);
         }
       }
+      setLoading(false);
+      setCode("");
       return totalString;
     } catch (error) {
-      console.error("Error:", error);
+      toast.error("Error:", error);
+      setLoading(loading);
       return "";
     }
   };
@@ -291,6 +309,7 @@ const InterviewBot = ({ history }) => {
     <div className="tyn-root">
       <div className="tyn-content">
         <NavBar />
+        {/* {JSON.stringify(loadingTrackerInt)} */}
         <div className="chat-container">
           <div className=" tyn-main tyn-main-boxed tyn-main-boxed-lg">
             <div className="tyn-chat-body">
@@ -339,46 +358,64 @@ const InterviewBot = ({ history }) => {
                     className="tyn-chat-form-input"
                     autoFocus
                     rows={1}
+                    disabled={loading}
                     value={humanVoiceLThree}
                     onChange={handleInputChange}
                   />
                   <div
-                    className="microphone-icon input-bar-icon"
+                    className={`microphone-icon input-bar-icon ${
+                      loading && "disabledIcon"
+                    }`}
                     style={{
                       backgroundColor: `${
                         listening ? "rgb(191, 219, 254)" : "#fff"
                       }`,
                     }}
                     onClick={() => {
-                      setHumanVoiceLTwo(humanVoiceLTwo + humanVoiceLOne);
-                      SpeechRecognition.startListening();
+                      if (!loading) {
+                        setHumanVoiceLTwo(humanVoiceLTwo + humanVoiceLOne);
+                        SpeechRecognition.startListening();
+                      }
                     }}
                   >
                     {listening ? (
                       <FontAwesomeIcon
                         icon="fa-solid fa-microphone-lines"
                         flip
+                        className={`${loading && "disabledIcon"}`}
                         style={{
                           color: "#2563eb",
                           transform: "scale(2.5)",
                         }}
-                        onClick={SpeechRecognition.stopListening}
+                        onClick={() => {
+                          if (!loading) {
+                            SpeechRecognition.stopListening;
+                          }
+                        }}
                       />
                     ) : (
-                      <FontAwesomeIcon icon="microphone" />
+                      <FontAwesomeIcon
+                        className={`${loading && "disabledIcon"}`}
+                        icon="microphone"
+                      />
                     )}
                   </div>
                   <div
-                    className="send-icon input-bar-icon"
+                    className={`send-icon input-bar-icon ${
+                      loading && "disabledIcon"
+                    }`}
                     onClick={handleInputSubmit}
                   >
-                    <FontAwesomeIcon icon="fa-solid fa-paper-plane" />
+                    <FontAwesomeIcon
+                      className={`${loading && "disabledIcon"}`}
+                      icon="fa-solid fa-paper-plane"
+                    />
                   </div>
                 </div>
               </form>
             </div>
           </div>
-          <div className="code-section">
+          <div className="code-section my-4">
             <Editor
               value={code}
               defaultLanguage="cpp"
@@ -387,11 +424,16 @@ const InterviewBot = ({ history }) => {
               onChange={handleEditorChange}
             />
             <div style={{ margin: "auto" }}>
-              <center className="send-code-button">
+              <center
+                className={`send-code-button btn btn-sm ${
+                  (code.trim() == "" || loading) && "disabled"
+                }`}
+                onClick={() => handleSendMessage("Code")}
+              >
                 Submit code{" "}
                 <FontAwesomeIcon
                   icon="fa-solid fa-square-caret-right"
-                  style={{ marginLeft: "5px" }}
+                  style={{ marginLeft: "5px", height: "20px", width: "20px" }}
                 />
               </center>
             </div>
@@ -429,7 +471,14 @@ function updateConversationArrays(
   ]);
 }
 
-function updateSentences(currentSentence, setSentences, utteranceVoice, synth) {
+function updateSentences(
+  currentSentence,
+  setSentences,
+  utteranceVoice,
+  synth,
+  // setLoadingTrackerInt,
+  // loadingTrackerInt
+) {
   let newSentence = "";
   if (
     currentSentence.includes(".") ||
@@ -463,6 +512,12 @@ function updateSentences(currentSentence, setSentences, utteranceVoice, synth) {
         utterance.voice = utteranceVoice;
       }
       synth.speak(utterance);
+      // setLoadingTrackerInt(loadingTrackerInt - 1);
+      // console.log("Dwaraka load so, ---");
+      // utterance.onend = () => {
+      //   console.log("Dwaraka load done so, +++");
+      //   setLoadingTrackerInt(loadingTrackerInt + 1);
+      // };
     }, 2000);
     let d1CurrentSentence = currentSentence + "";
     let d2CurrentSentence =
