@@ -80,7 +80,38 @@ const ChatBubble = ({
           </div>
         </div>
         <span className="message-text">
-          {sender === "user1" && timeStamp ? (
+          {(() => {
+            if (sender === "user1") {
+              if (timeStamp) {
+                return (
+                  <TypingEffect
+                    textToType={message}
+                    scrollOnType={handelScrollToBottomMessage}
+                  />
+                );
+              } else {
+                return message;
+              }
+            } else {
+              if (message.startsWith("//code")) {
+                return (
+                  <>
+                    <h6 className="tyn-code-block-title tyn-overline mb-0">
+                      Your code
+                    </h6>
+                    <pre className="chat-bubble-code-area">
+                      <code className="chat-bubble-code">
+                        {message.replace(/^\/\/code/, "")}
+                      </code>
+                    </pre>
+                  </>
+                );
+              } else {
+                return <>{message}</>;
+              }
+            }
+          })()}
+          {/* {sender === "user1" && timeStamp ? (
             <TypingEffect
               textToType={message}
               scrollOnType={handelScrollToBottomMessage}
@@ -96,7 +127,7 @@ const ChatBubble = ({
             </>
           ) : (
             message
-          )}
+          )} */}
         </span>
         {timeStamp && (
           <span className="timestamp">{getCurrentTime(timeStamp)}</span>

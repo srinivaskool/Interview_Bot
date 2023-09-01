@@ -12,6 +12,10 @@ import SpeechRecognition, {
 import ChatBubble from "../../components/ChatBubble";
 import NavBar from "../../components/NavBar";
 import SpeechSynthesisComp from "../../components/SpeechSynthesisComp";
+import {
+  updateConversationArrays,
+  updateSentences,
+} from "../../supportFunctions.js/InterviewBotFunctions";
 
 import { toast } from "react-toastify";
 import "./InterviewBot.css";
@@ -39,7 +43,7 @@ const InterviewBot = ({ history }) => {
   const [utteranceVoice, setUtteranceVoice] = useState();
   const chatSectionRef = useRef(null); // Ref to the chat section
   const jumpToBottomButtonRef = useRef(null);
-  const [hasUserGivenCode, setHasUserGivenCode] = useState(false)
+  const [hasUserGivenCode, setHasUserGivenCode] = useState(false);
 
   const [errorMesssage, setErrorMessage] = useState({
     role: "assistant",
@@ -204,11 +208,11 @@ const InterviewBot = ({ history }) => {
 
   const handleSendMessage = async (method) => {
     setLoading(true);
-    if(method === "Code"){
-      setHasUserGivenCode(true)
+    if (method === "Code") {
+      setHasUserGivenCode(true);
     }
     try {
-      let data = method === "Code" ? `//code\n${code}` : transcript;
+      let data = method === "Code" ? `//code\n${code}` : method;
 
       let userMessage = data;
       const response = await fetch(
@@ -277,7 +281,7 @@ const InterviewBot = ({ history }) => {
           currentSentence,
           setSentences,
           utteranceVoice,
-          synth,
+          synth
           // setLoadingTrackerInt,
           // loadingTrackerInt
         );
@@ -301,9 +305,11 @@ const InterviewBot = ({ history }) => {
       }
       setLoading(false);
       setCode("");
+      setHasUserGivenCode(false);
       return totalString;
     } catch (error) {
       toast.error("Error:", error);
+      setHasUserGivenCode(false);
       setLoading(loading);
       return "";
     }
@@ -419,18 +425,20 @@ const InterviewBot = ({ history }) => {
               </form>
             </div>
           </div>
-          <div className="code-section my-4">
-            <Editor
-              value={code}
-              defaultLanguage="cpp"
-              height={"516px"}
-              theme="vs-dark"
-              defaultValue={code}
-              onChange={handleEditorChange}
-            />
-            <div style={{ margin: "auto" }}>
-              <center
-                className={`send-code-button btn btn-sm ${
+          <div>
+            <div className="code-section my-4">
+              <Editor
+                value={code}
+                defaultLanguage="cpp"
+                height={"496px"}
+                theme="vs-dark"
+                defaultValue={code}
+                onChange={handleEditorChange}
+              />
+            </div>
+            <div className=" tyn-chat-form mx-0">
+              <div
+                className={`send-code-button btn btn-sm m-auto ${
                   (code.trim() == "" || loading) && "disabled"
                 }`}
                 onClick={() => handleSendMessage("Code")}
@@ -440,7 +448,7 @@ const InterviewBot = ({ history }) => {
                   icon="fa-solid fa-square-caret-right"
                   style={{ marginLeft: "5px", height: "20px", width: "20px" }}
                 />
-              </center>
+              </div>
             </div>
           </div>
         </div>
@@ -450,99 +458,3 @@ const InterviewBot = ({ history }) => {
 };
 
 export default InterviewBot;
-function updateConversationArrays(
-  userMessage,
-  totalString,
-  setConversation,
-  conversation,
-  SetTimeStamps,
-  timeStamps
-) {
-  const newUserMessageTimeStamp = new Date();
-  const newUserMessage = {
-    role: "user",
-    content: userMessage,
-  };
-  const newAssistantMessage = {
-    role: "assistant",
-    content: totalString,
-  };
-  const newAssistantMessageTimeStamp = new Date();
-  setConversation([...conversation, newUserMessage, newAssistantMessage]);
-  SetTimeStamps([
-    ...timeStamps,
-    newUserMessageTimeStamp,
-    newAssistantMessageTimeStamp,
-  ]);
-}
-
-function updateSentences(
-  currentSentence,
-  setSentences,
-  utteranceVoice,
-  synth,
-  // setLoadingTrackerInt,
-  // loadingTrackerInt
-) {
-  let newSentence = "";
-  if (
-    currentSentence.includes(".") ||
-    currentSentence.includes("?") ||
-    currentSentence.includes("!") ||
-    currentSentence.includes(",") ||
-    currentSentence.includes(":")
-  ) {
-    let dCurrentSentence = currentSentence + "";
-    newSentence =
-      (dCurrentSentence.includes(".")
-        ? dCurrentSentence.split(".")[0] + "."
-        : "") +
-      (dCurrentSentence.includes("?")
-        ? dCurrentSentence.split("?")[0] + "?"
-        : "") +
-      (dCurrentSentence.includes("!")
-        ? dCurrentSentence.split("!")[0] + "!"
-        : "") +
-      (dCurrentSentence.includes(",")
-        ? dCurrentSentence.split(",")[0] + ","
-        : "") +
-      (dCurrentSentence.includes(":")
-        ? dCurrentSentence.split(":")[0] + ":"
-        : "");
-    setSentences((prevSentences) => [...prevSentences, newSentence]);
-
-    setTimeout(() => {
-      const utterance = new SpeechSynthesisUtterance(newSentence);
-      if (utteranceVoice) {
-        utterance.voice = utteranceVoice;
-      }
-      synth.speak(utterance);
-      // setLoadingTrackerInt(loadingTrackerInt - 1);
-      // console.log("Dwaraka load so, ---");
-      // utterance.onend = () => {
-      //   console.log("Dwaraka load done so, +++");
-      //   setLoadingTrackerInt(loadingTrackerInt + 1);
-      // };
-    }, 2000);
-    let d1CurrentSentence = currentSentence + "";
-    let d2CurrentSentence =
-      (d1CurrentSentence.includes(".") &&
-      d1CurrentSentence.split(".").length > 1
-        ? d1CurrentSentence.split(".")[1]
-        : "") + d1CurrentSentence.includes("?") &&
-      d1CurrentSentence.split("?").length > 1
-        ? d1CurrentSentence.split("?")[1]
-        : "" + d1CurrentSentence.includes("!") &&
-          d1CurrentSentence.split("!").length > 1
-        ? d1CurrentSentence.split("!")[1]
-        : "" + d1CurrentSentence.includes(",") &&
-          d1CurrentSentence.split(",").length > 1
-        ? d1CurrentSentence.split(",")[1]
-        : "" + d1CurrentSentence.includes(":") &&
-          d1CurrentSentence.split(":").length > 1
-        ? d1CurrentSentence.split(":")[1]
-        : "";
-    currentSentence = d2CurrentSentence;
-  }
-  return { currentSentence, newSentence };
-}

@@ -94,6 +94,7 @@ export default function Register() {
             email: user.email,
             token: idTokenResult.token,
             uid: user.uid,
+            profilepic: user.photoURL,
           },
         });
 

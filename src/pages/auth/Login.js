@@ -22,6 +22,7 @@ export const handleGoogleLogin = async (dispatch, navigate, redirectPage) => {
         email: user.email,
         token: idTokenResult.token,
         uid: user.uid,
+        profilepic: user.photoURL,
       },
     });
 
@@ -56,6 +57,7 @@ const Login = () => {
           email: user.email,
           token: idTokenResult.token,
           uid: user.uid,
+          profilepic: user.photoURL,
         },
       });
       navigate(redirectPage);

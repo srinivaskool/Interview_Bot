@@ -6,11 +6,20 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./NavBar.css";
 
-export default function NewNavBar() {
+export default function NavBar() {
   const auth = getAuth();
   let dispatch = useDispatch();
   let location = useLocation();
   let navigate = useNavigate();
+
+  function updateRedirectRedux(destination) {
+    console.log("Dwaraka-yayyy: ", destination);
+    dispatch({
+      type: "LOGIN_REDIRECT",
+      payload: destination,
+    });
+    navigate(destination);
+  }
 
   let { user } = useSelector((state) => ({ ...state }));
   const logout = async () => {
@@ -61,7 +70,10 @@ export default function NewNavBar() {
           <div className="tyn-appbar-content">
             <ul className="tyn-appbar-nav tyn-appbar-nav-start">
               <li className="tyn-appbar-item d-none d-sm-inline-flex">
-                <Link className="tyn-appbar-link" to="/interview">
+                <span
+                  className="tyn-appbar-link"
+                  onClick={() => updateRedirectRedux("/interview")}
+                >
                   {/* robot */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +87,7 @@ export default function NewNavBar() {
                     <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2V1.866ZM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5Z" />
                   </svg>
                   <span className="d-none">ChatBot</span>
-                </Link>
+                </span>
               </li>
             </ul>
             {/* .tyn-appbar-nav */}
@@ -91,7 +103,7 @@ export default function NewNavBar() {
                       style={{ opacity: `${user ? "1" : "0.7"}` }}
                       src={
                         user
-                          ?  user.profilepic
+                          ? user.profilepic
                           : "https://png.pngtree.com/element_our/sm/20180516/sm_5afc60f232478.png"
                       }
                       alt=""
@@ -105,10 +117,7 @@ export default function NewNavBar() {
                       <div className="dropdown-gap">
                         <div className="tyn-media-group">
                           <div className="tyn-media tyn-size-lg">
-                            <img
-                              src= {user.profilepic}
-                              alt=""
-                            />
+                            <img src={user.profilepic} alt="" />
                           </div>
                           <div className="tyn-media-col">
                             <div className="tyn-media-row">
