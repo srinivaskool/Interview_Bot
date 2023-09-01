@@ -39,6 +39,7 @@ const InterviewBot = ({ history }) => {
   const [utteranceVoice, setUtteranceVoice] = useState();
   const chatSectionRef = useRef(null); // Ref to the chat section
   const jumpToBottomButtonRef = useRef(null);
+  const [hasUserGivenCode, setHasUserGivenCode] = useState(false)
 
   const [errorMesssage, setErrorMessage] = useState({
     role: "assistant",
@@ -203,10 +204,13 @@ const InterviewBot = ({ history }) => {
 
   const handleSendMessage = async (method) => {
     setLoading(true);
+    if(method === "Code"){
+      setHasUserGivenCode(true)
+    }
     try {
-      let data = method === "Code" ? code : transcript;
+      let data = method === "Code" ? `//code\n${code}` : transcript;
 
-      let userMessage = method;
+      let userMessage = data;
       const response = await fetch(
         "https://api.openai.com/v1/chat/completions",
         {
@@ -419,6 +423,7 @@ const InterviewBot = ({ history }) => {
             <Editor
               value={code}
               defaultLanguage="cpp"
+              height={"516px"}
               theme="vs-dark"
               defaultValue={code}
               onChange={handleEditorChange}

@@ -9,7 +9,7 @@ const ChatBubble = ({
   timeStamp,
   scrollToBottomMessage,
   utteranceVoice,
-  user
+  user,
 }) => {
   const alignClass = sender === "user1" ? "left" : "right";
   const [speaking, setSpeaking] = useState(false);
@@ -67,20 +67,33 @@ const ChatBubble = ({
         </span>
       )} */}
       <span className={`chat-bubble`}>
-      <div className="tyn-qa-avatar">
-            <div className="tyn-media tyn-size-md">
-              <img
-                src= {sender != "user1" ?  user.profilepic : "https://connectme-html.themeyn.com/images/avatar/bot-1.jpg"}
-                alt=""
-              />
-            </div>
+        <div className="tyn-qa-avatar">
+          <div className="tyn-media tyn-size-md">
+            <img
+              src={
+                sender != "user1"
+                  ? user.profilepic
+                  : "https://connectme-html.themeyn.com/images/avatar/bot-1.jpg"
+              }
+              alt=""
+            />
           </div>
+        </div>
         <span className="message-text">
           {sender === "user1" && timeStamp ? (
             <TypingEffect
               textToType={message}
               scrollOnType={handelScrollToBottomMessage}
             />
+          ) : sender != "user1" && message.startsWith("//code") ? (
+            <>
+              <h6 className="tyn-code-block-title tyn-overline mb-0">Your code</h6>
+              <pre className="chat-bubble-code-area">
+                <code className="chat-bubble-code">
+                  {message.replace(/^\/\/code/, "")}
+                </code>
+              </pre>
+            </>
           ) : (
             message
           )}
