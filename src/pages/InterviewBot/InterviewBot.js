@@ -317,6 +317,15 @@ const InterviewBot = ({ history }) => {
 
   return (
     <div className="tyn-root">
+      {loading && (
+        <div className="loadingAnimationContainerDiv">
+          <FontAwesomeIcon
+            className="loadingAnimation"
+            icon="fa-solid fa-spinner"
+            spin
+          />
+        </div>
+      )}
       <div className="tyn-content">
         <NavBar />
         {/* {JSON.stringify(loadingTrackerInt)} */}

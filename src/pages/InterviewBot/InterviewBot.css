@@ -193,3 +193,22 @@
   background-color: rgb(226, 232, 240) !important;
   color: rgb(102, 102, 102) !important;
 }
+.loadingAnimation {
+  color: #2563eb;
+  height: 200px;
+  width: 200px;
+  cursor: wait;
+}
+.loadingAnimationContainerDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  cursor: wait;
+  background-color: rgba(37, 99, 235, 0.05);
+}
