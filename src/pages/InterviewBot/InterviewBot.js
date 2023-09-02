@@ -13,6 +13,8 @@ import ChatBubble from "../../components/ChatBubble";
 import NavBar from "../../components/NavBar";
 import SpeechSynthesisComp from "../../components/SpeechSynthesisComp";
 import {
+  getBasicInterviewPrompt,
+  getCodeEvaluationPrompt,
   updateConversationArrays,
   updateSentences,
 } from "../../supportFunctions.js/InterviewBotFunctions";
@@ -88,8 +90,9 @@ const InterviewBot = ({ history }) => {
   const [conversation, setConversation] = useState([
     {
       role: "system",
-      content:
-        "I want you to act as an interviewer. I will be the candidate and you will ask me coding interview questions for a Junior Software Engineer position. Provide constructive feedback on the candidates answers, offer suggestions for improvement, and discuss techniques for effective communication.Your personality type is friendLy and warm.Limit your responses to 3 sentences.Do not respond with Lists or ask multiple questions at once.End every response with a question to keep the conversation going.I want you to only reply as the interviewer.Do not write all the conversation at once.I want you to only do the interview with me.Ask me the questions and wait for my answers.Do not write explanations.Ask me the questions one by one like an interviewer does and wait for my answers.Ask me random questions from one of the following topics and ask follow- up questions: Data Structure, Algorithm, Operating System, System Design, Network and Security.please dont explain the amswer first say that the answer is wrong and explain the answer in maximum of 1 - 2 lines.While in -between questions dont give the entire answer give pointers like hints and let me guess the answer. You are a job interview partner, assisting someone in preparing for their upcoming job interview. Your task is to simulate a realistic job interview experience. Please validate all my answers and tell its either correct or partially correct or wrong, ls be a little hard on my answers. At a point pls ask only one question. The important thing is dont write the sure line at the start and last line only ask questions , evaluate and answer them. Dont ask the same question again will they couldnt answer it. Start with some theory question like differences between array and linked and basic coding questions like Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.You may assume that each input would have exactly one solution, and you may not use the same element twice. This is important that you always check if the code is optimal and best time complexity otherwise even if the code works tell that its not efficient",
+      content: getBasicInterviewPrompt({
+        role: "Junior Software Engineer position",
+      }),
     },
     {
       role: "assistant",
@@ -212,8 +215,14 @@ const InterviewBot = ({ history }) => {
       setHasUserGivenCode(true);
     }
     try {
-      let data = method === "Code" ? `//code\n${code}` : method;
-
+      let shouldEvaluateCode = method === "evaluateCode";
+      console.log("Dwaraka-method: ", method);
+      let data =
+        method === "Code"
+          ? `//code\n${code}`
+          : method === "evaluateCode"
+          ? `//code\n${code}`
+          : method;
       let userMessage = data;
       const response = await fetch(
         "https://api.openai.com/v1/chat/completions",
@@ -228,7 +237,15 @@ const InterviewBot = ({ history }) => {
             max_tokens: 100,
             temperature: 0.7,
             n: 1,
-            messages: conversation.concat([{ role: "user", content: data }]),
+            messages: shouldEvaluateCode
+              ? conversation.concat([
+                  {
+                    role: "system",
+                    content: getCodeEvaluationPrompt({}),
+                  },
+                  { role: "user", content: data },
+                ])
+              : conversation.concat([{ role: "user", content: data }]),
             stream: true,
           }),
         }
@@ -274,7 +291,6 @@ const InterviewBot = ({ history }) => {
           deltaText = deltaText.concat(content);
         }
         totalString = totalString + deltaText;
-
         currentSentence = currentSentence + deltaText;
 
         const updatedSentences = updateSentences(
@@ -453,6 +469,18 @@ const InterviewBot = ({ history }) => {
                 onClick={() => handleSendMessage("Code")}
               >
                 Submit code{" "}
+                <FontAwesomeIcon
+                  icon="fa-solid fa-square-caret-right"
+                  style={{ marginLeft: "5px", height: "20px", width: "20px" }}
+                />
+              </div>
+              <div
+                className={`send-code-button btn btn-sm m-auto ${
+                  (code.trim() == "" || loading) && "disabled"
+                }`}
+                onClick={() => handleSendMessage("evaluateCode")}
+              >
+                Evaluate code{" "}
                 <FontAwesomeIcon
                   icon="fa-solid fa-square-caret-right"
                   style={{ marginLeft: "5px", height: "20px", width: "20px" }}
