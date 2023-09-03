@@ -1,3 +1,125 @@
+export function handleSendUserResponse(setLoading, setHasUserGivenCode, code, conversation, setSentences, utteranceVoice, synth, setConversation, SetTimeStamps, timeStamps, setCode, loading) {
+  return async (method) => {
+    setLoading(true);
+    if (method === "Code") {
+      setHasUserGivenCode(true);
+    }
+    try {
+      let shouldEvaluateCode = method === "evaluateCode";
+      console.log("Dwaraka-method: ", method);
+      let data = method === "Code"
+        ? `//code\n${code}`
+        : method === "evaluateCode"
+          ? `//code\n${code}`
+          : method;
+      let userMessage = data;
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: process.env.REACT_APP_CHATGPT_API_KEY,
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            max_tokens: 100,
+            temperature: 0.7,
+            n: 1,
+            messages: shouldEvaluateCode
+              ? conversation.concat([
+                {
+                  role: "system",
+                  content: getCodeEvaluationPrompt({}),
+                },
+                { role: "user", content: data },
+              ])
+              : conversation.concat([{ role: "user", content: data }]),
+            stream: true,
+          }),
+        }
+      );
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        console.error("Error: fail to read data from response");
+        return;
+      }
+      let totalString = "";
+
+      let currentSentence = "";
+      let currentTexSentenceTillNow = "";
+      setSentences([]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+
+        const textDecoder = new TextDecoder("utf-8");
+        const chunk = textDecoder.decode(value);
+
+        let deltaText = "";
+        for (const line of chunk.split("\n")) {
+          const trimmedLine = line.trim();
+          if (!trimmedLine || trimmedLine === "data: [DONE]") {
+            continue;
+          }
+
+          const json = trimmedLine.replace("data: ", "");
+          const obj = JSON.parse(json);
+          const content = obj &&
+            obj.choices &&
+            obj.choices[0] &&
+            obj.choices[0].delta &&
+            obj.choices[0].delta.content
+            ? obj.choices[0].delta.content.toString()
+            : "";
+          deltaText = deltaText.concat(content);
+        }
+        totalString = totalString + deltaText;
+        currentSentence = currentSentence + deltaText;
+
+        const updatedSentences = updateSentences(
+          currentSentence,
+          setSentences,
+          utteranceVoice,
+          synth
+          // setLoadingTrackerInt,
+          // loadingTrackerInt
+        );
+
+        currentSentence = updatedSentences.currentSentence;
+
+        if (updatedSentences.newSentence) {
+          currentTexSentenceTillNow += updatedSentences.newSentence;
+
+          setTimeout(() => {
+            updateConversationArrays(
+              userMessage,
+              currentTexSentenceTillNow,
+              setConversation,
+              conversation,
+              SetTimeStamps,
+              timeStamps
+            );
+          }, 2000);
+        }
+      }
+      setLoading(false);
+      setCode("");
+      setHasUserGivenCode(false);
+      return totalString;
+    } catch (error) {
+      toast.error("Error:", error);
+      setHasUserGivenCode(false);
+      setLoading(loading);
+      return "";
+    }
+  };
+}
+
 export function updateConversationArrays(
   userMessage,
   totalString,
