@@ -94,8 +94,11 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
       role: "system",
       content: isThisDSARoundPage
         ? getDSAQuestionStartingPrompt({
-          question: dsaQuestionsArray[Math.floor(Math.random() * dsaQuestionsArray.length)]
-        })
+            question:
+              dsaQuestionsArray[
+                Math.floor(Math.random() * dsaQuestionsArray.length)
+              ],
+          })
         : getBasicInterviewPrompt({
             role: "Junior Software Engineer position",
           }),
@@ -254,20 +257,19 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
   });
 
   const onSubmitCodeHandler = async () => {
-    console.log("Dwarak json:before ");
+    var userCode = code;
     const result = await handleEvaluateCode("evaluateCode");
     console.log("Dwarak json: ", JSON.parse(result));
     setJsonCodeEvaluatedData(JSON.parse(result));
-    storeThisDataInFirestore(JSON.parse(result));
+    storeThisDataInFirestore(JSON.parse(result), userCode);
   };
 
-  const storeThisDataInFirestore = async (e) => {
-    console.log("Dwarak adding to firestore: ", e);
+  const storeThisDataInFirestore = async (e, userCode) => {
+    console.log("Dwarak adding to firestore: ", e, "useXCode: ", userCode);
     setLoading(true);
     try {
       await addDataToFirestore({
-        userCode_data:
-          codeEvaluateConversation[codeEvaluateConversation.length - 2],
+        userCode_data: userCode,
         evaluation_data: e,
         parent_collection: "dsa-code-evaluation",
         parent_document: user.uid,
