@@ -42,6 +42,10 @@ const App = () => {
           element={<InterviewBot isThisDSARoundPage={false} />}
         />
         <Route
+          path="/interview/resume"
+          element={<InterviewBot isThisDSARoundPage={false} />}
+        />
+        <Route
           path="/interview/dsaaround"
           element={<InterviewBot isThisDSARoundPage={true} />}
         />
