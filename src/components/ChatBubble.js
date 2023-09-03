@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Editor from "@monaco-editor/react";
 import React, { useState } from "react";
 import "./ChatBubble.css";
 import TypingEffect from "./TypingEffect";
@@ -99,11 +100,15 @@ const ChatBubble = ({
                     <h6 className="tyn-code-block-title tyn-overline mb-0">
                       Your code
                     </h6>
-                    <pre className="chat-bubble-code-area">
-                      <code className="chat-bubble-code">
-                        {message.replace(/^\/\/code/, "")}
-                      </code>
-                    </pre>
+                    <Editor
+                      value={message.replace(/^\/\/code/, "")}
+                      defaultLanguage="cpp"
+                      width={"500px"}
+                      height={"100px"}
+                      theme="vs-dark"
+                      defaultValue={message.replace(/^\/\/code/, "")}
+                      onChange={() => {}}
+                    />
                   </>
                 );
               } else {

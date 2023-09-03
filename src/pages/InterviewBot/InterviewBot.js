@@ -468,9 +468,9 @@ const InterviewBot = ({ history }) => {
                 }`}
                 onClick={() => handleSendMessage("Code")}
               >
-                Submit code{" "}
+                Run code{" "}
                 <FontAwesomeIcon
-                  icon="fa-solid fa-square-caret-right"
+                  icon="fa-solid fa-play"
                   style={{ marginLeft: "5px", height: "20px", width: "20px" }}
                 />
               </div>
@@ -480,7 +480,7 @@ const InterviewBot = ({ history }) => {
                 }`}
                 onClick={() => handleSendMessage("evaluateCode")}
               >
-                Evaluate code{" "}
+                Submit code{" "}
                 <FontAwesomeIcon
                   icon="fa-solid fa-square-caret-right"
                   style={{ marginLeft: "5px", height: "20px", width: "20px" }}
