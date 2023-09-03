@@ -9,15 +9,18 @@ import { useNavigate } from "react-router-dom";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { toast } from "react-toastify";
 import ChatBubble from "../../components/ChatBubble";
 import NavBar from "../../components/NavBar";
 import SpeechSynthesisComp from "../../components/SpeechSynthesisComp";
+import { addDataToFirestore } from "../../supportFunctions.js/FirebaseFunctions";
 import {
   getBasicInterviewPrompt,
   getCodeEvaluationPrompt,
+  getDSAQuestionStartingPrompt,
   handleSendUserResponse,
 } from "../../supportFunctions.js/InterviewBotFunctions";
-
+import dsaQuestionsArray from "../../supportFunctions.js/dSAQuestions";
 import "./InterviewBot.css";
 
 const InterviewBot = ({ isThisDSARoundPage }) => {
@@ -41,6 +44,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
   const [humanVoiceLTwo, setHumanVoiceLTwo] = useState("");
   const [humanVoiceLThree, setHumanVoiceLThree] = useState("");
   const [utteranceVoice, setUtteranceVoice] = useState();
+  const [jsonCodeEvaluatedData, setJsonCodeEvaluatedData] = useState(null);
   const chatSectionRef = useRef(null); // Ref to the chat section
   const jumpToBottomButtonRef = useRef(null);
   const [hasUserGivenCode, setHasUserGivenCode] = useState(false);
@@ -88,9 +92,13 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
   const [conversation, setConversation] = useState([
     {
       role: "system",
-      content: getBasicInterviewPrompt({
-        role: "Junior Software Engineer position",
-      }),
+      content: isThisDSARoundPage
+        ? getDSAQuestionStartingPrompt({
+          question: dsaQuestionsArray[Math.floor(Math.random() * dsaQuestionsArray.length)]
+        })
+        : getBasicInterviewPrompt({
+            role: "Junior Software Engineer position",
+          }),
     },
     {
       role: "assistant",
@@ -245,9 +253,36 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
     isThisCodeEvaluation: true,
   });
 
+  const onSubmitCodeHandler = async () => {
+    console.log("Dwarak json:before ");
+    const result = await handleEvaluateCode("evaluateCode");
+    console.log("Dwarak json: ", JSON.parse(result));
+    setJsonCodeEvaluatedData(JSON.parse(result));
+    storeThisDataInFirestore(JSON.parse(result));
+  };
+
+  const storeThisDataInFirestore = async (e) => {
+    console.log("Dwarak adding to firestore: ", e);
+    setLoading(true);
+    try {
+      await addDataToFirestore({
+        userCode_data:
+          codeEvaluateConversation[codeEvaluateConversation.length - 2],
+        evaluation_data: e,
+        parent_collection: "dsa-code-evaluation",
+        parent_document: user.uid,
+        child_collection: "interviewBot",
+      });
+      setLoading(false);
+      toast.success("added to firestore");
+    } catch (error) {
+      console.error("Error Creating Pack: ", error);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="tyn-root">
-      {/* {JSON.stringify(codeEvaluateConversation)} */}
       {loading && (
         <div className="loadingAnimationContainerDiv">
           <FontAwesomeIcon
@@ -393,7 +428,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
                 className={`send-code-button btn btn-sm m-auto ${
                   (code.trim() == "" || loading) && "disabled"
                 }`}
-                onClick={() => handleEvaluateCode("evaluateCode")}
+                onClick={onSubmitCodeHandler}
               >
                 Submit code{" "}
                 <FontAwesomeIcon

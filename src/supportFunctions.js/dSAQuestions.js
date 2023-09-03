@@ -1,0 +1,8 @@
+const dsaQuestionsArray = [
+    "Given an array (or string), the task is to reverse the array/string.\nExamples :\n\nInput  : arr[] = {1, 2, 3}\nOutput : arr[] = {3, 2, 1}\n\nInput :  arr[] = {4, 5, 1, 2}\nOutput : arr[] = {2, 1, 5, 4}",
+    "Given an array (or string), the task is to reverse the array/string.\nExamples :\n\nInput  : arr[] = {1, 2, 3}\nOutput : arr[] = {3, 2, 1}\n\nInput :  arr[] = {4, 5, 1, 2}\nOutput : arr[] = {2, 1, 5, 4}",
+    "Given an array arr[] and an integer K where K is smaller than size of array, the task is to find the Kth smallest element in the given array. It is given that all array elements are distinct.\n\nNote :-  l and r denotes the starting and ending index of the array.\n\nExample 1:\n\nInput:\nN = 6\narr[] = 7 10 4 3 20 15\nK = 3\nOutput : 7\nExplanation :\n3rd smallest element in the given array is 7.",
+    "Given an array of size N containing only 0s, 1s, and 2s; sort the array in ascending order.\n\nExample 1:\n\nInput: N = 5\narr[]= {0 2 1 2 0}\nOutput: 0 0 1 2 2\nExplanation:\n0s 1s and 2s are segregated into ascending order.",
+    "An array contains both positive and negative numbers in random order. Rearrange the array elements so that all negative numbers appear before all positive numbers.\n\nExamples :\n\nInput: -12, 11, -13, -5, 6, -7, 5, -3, -6\nOutput: -12 -13 -5 -7 -3 -6 11 6 5\nNote: Order of elements is not important here."
+]
+export default dsaQuestionsArray;
