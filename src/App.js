@@ -34,15 +34,22 @@ const App = () => {
 
   return (
     <>
-    <ToastContainer />
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/interview" element={<InterviewBot />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot/password" element={<ForgotPassword />} />
-      <Route path="/register/complete" element={<Register />} />
-    </Routes>
+      <ToastContainer />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/interview"
+          element={<InterviewBot isThisDSARoundPage={false} />}
+        />
+        <Route
+          path="/interview/dsaaround"
+          element={<InterviewBot isThisDSARoundPage={true} />}
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot/password" element={<ForgotPassword />} />
+        <Route path="/register/complete" element={<Register />} />
+      </Routes>
     </>
   );
 };

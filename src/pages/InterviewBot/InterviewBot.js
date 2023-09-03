@@ -20,7 +20,7 @@ import {
 
 import "./InterviewBot.css";
 
-const InterviewBot = ({ history }) => {
+const InterviewBot = ({ isThisDSARoundPage }) => {
   const dispatch = useDispatch();
   const auth = getAuth();
   const navigate = useNavigate();
@@ -245,7 +245,7 @@ const InterviewBot = ({ history }) => {
 
   return (
     <div className="tyn-root">
-      {JSON.stringify(codeEvaluateConversation)}
+      {/* {JSON.stringify(codeEvaluateConversation)} */}
       {loading && (
         <div className="loadingAnimationContainerDiv">
           <FontAwesomeIcon
@@ -363,7 +363,7 @@ const InterviewBot = ({ history }) => {
               </form>
             </div>
           </div>
-          <div>
+          <div style={{display : isThisDSARoundPage ? "block" : "none"}}>
             <div className="code-section my-4">
               <Editor
                 value={code}
