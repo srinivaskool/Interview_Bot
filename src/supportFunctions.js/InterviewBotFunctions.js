@@ -1,4 +1,4 @@
-import "./dSAQuestions";
+import dsaQuestionsArray from "./dSAQuestions";
 
 export function handleSendUserResponse({
   setLoading,
@@ -13,7 +13,9 @@ export function handleSendUserResponse({
   timeStamps,
   setCode,
   loading,
+  setLatestBotMessage,
   isThisCodeEvaluation,
+  setMainConversationArray,
 }) {
   return async (method) => {
     setLoading(true);
@@ -123,7 +125,10 @@ export function handleSendUserResponse({
               setConversation,
               conversation,
               SetTimeStamps,
-              timeStamps
+              timeStamps,
+              setLatestBotMessage,
+              isThisCodeEvaluation,
+              setMainConversationArray
             );
           }, 2000);
         }
@@ -147,7 +152,10 @@ export function updateConversationArrays(
   setConversation,
   conversation,
   SetTimeStamps,
-  timeStamps
+  timeStamps,
+  setLatestBotMessage,
+  isThisCodeEvaluation,
+  setMainConversationArray
 ) {
   const newUserMessageTimeStamp = new Date();
   const newUserMessage = {
@@ -159,12 +167,37 @@ export function updateConversationArrays(
     content: totalString,
   };
   const newAssistantMessageTimeStamp = new Date();
-  setConversation([...conversation, newUserMessage, newAssistantMessage]);
-  SetTimeStamps([
-    ...timeStamps,
-    newUserMessageTimeStamp,
-    newAssistantMessageTimeStamp,
-  ]);
+  setLatestBotMessage(newAssistantMessage);
+  if (!isThisCodeEvaluation) {
+    setConversation([...conversation, newUserMessage, newAssistantMessage]);
+    SetTimeStamps([
+      ...timeStamps,
+      newUserMessageTimeStamp,
+      newAssistantMessageTimeStamp,
+    ]);
+  } else {
+    const newSystemMessage = {
+      role: "system",
+      content: getDSAQuestionStartingPrompt({
+        question:
+          dsaQuestionsArray[
+            Math.floor(Math.random() * dsaQuestionsArray.length)
+          ],
+      }),
+    };
+    const newAssistantMessage = {
+      role: "assistant",
+      content: "Are you ready for the next question?",
+    };
+    setMainConversationArray([newSystemMessage, newAssistantMessage]);
+    setConversation([
+      {
+        role: "system",
+        content: getCodeEvaluationPrompt(),
+      },
+    ]);
+    SetTimeStamps([new Date(), new Date()]);
+  }
 }
 
 export function updateSentences(
@@ -238,12 +271,12 @@ export function getBasicInterviewPrompt({ role }) {
   return `I want you to act as an interviewer. I will be the candidate and you will ask me coding interview questions for a ${role}. Provide constructive feedback on the candidates answers, offer suggestions for improvement, and discuss techniques for effective communication.Your personality type is friendLy and warm.Limit your responses to 3 sentences.Do not respond with Lists or ask multiple questions at once.End every response with a question to keep the conversation going.I want you to only reply as the interviewer.Do not write all the conversation at once.I want you to only do the interview with me.Ask me the questions and wait for my answers.Do not write explanations.Ask me the questions one by one like an interviewer does and wait for my answers.Ask me random questions from one of the following topics and ask follow- up questions: Data Structure, Algorithm, Operating System, System Design, Network and Security.please dont explain the amswer first say that the answer is wrong and explain the answer in maximum of 1 - 2 lines.While in -between questions dont give the entire answer give pointers like hints and let me guess the answer. You are a job interview partner, assisting someone in preparing for their upcoming job interview. Your task is to simulate a realistic job interview experience. Please validate all my answers and tell its either correct or partially correct or wrong, ls be a little hard on my answers. At a point pls ask only one question. The important thing is dont write the sure line at the start and last line only ask questions , evaluate and answer them. Dont ask the same question again will they couldnt answer it. Start with some theory question like differences between array and linked and basic coding questions like Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.You may assume that each input would have exactly one solution, and you may not use the same element twice. This is important that you always check if the code is optimal and best time complexity otherwise even if the code works tell that its not efficient`;
 }
 
-export function getDSAQuestionStartingPrompt({question}){
-  return `You are the interviewer, and I need your evaluation expertise in Data Structures and Algorithms (DSA). I'll need you to ask this DSA question from the perspective of an interviewer asking this question to a intervewee. The question is ${question}. I need you to ask me this question`
+export function getDSAQuestionStartingPrompt({ question }) {
+  return `You are the interviewer, and I need your evaluation expertise in Data Structures and Algorithms (DSA). I'll need you to ask this DSA question from the perspective of an interviewer asking this question to an interviewer. The question is ${question}. Could you ask me this question with a story it should be like a  competitive coding question with a backstory? Requirements:- Please make a story around the DSA question not like leetcode or geek for geek questions. It should be the same question but with a story similar to codeforces like it should have descriptions with names.  Don't give the intro line or the title of the question. Just give the DSA question only not conversation or extra data. You need to give a test case of input and output in the above manner to describe the question. Keep the story very short and straight and avoid adding too many details about the story. Wrap up your question in strictly less than 50 words. I repeat again, your response should not sross 100 words`;
+  // return `You are the interviewer, and I need your evaluation expertise in Data Structures and Algorithms (DSA). I'll need you to ask this DSA question from the perspective of an interviewer asking this question to a intervewee. The question is ${question}. I need you to ask me this question`;
 }
 
 export function getCodeEvaluationPrompt() {
-  console.log("dwaraka-inside evalutate prompt");
   //   return `
   //   You are the interviewer, and I need your evaluation expertise in Data Structures and Algorithms (DSA). I'll provide you with a code snippet related to a DSA question. Your task is to assess the code based on the following five criteria, each rated out of 5:
 

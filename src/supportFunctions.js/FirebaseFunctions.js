@@ -12,6 +12,7 @@ import { fStore } from "../firebase";
 export async function addDataToFirestore({
   userCode_data,
   evaluation_data,
+  dsa_question,
   parent_collection,
   parent_document,
   child_collection,
@@ -29,6 +30,7 @@ export async function addDataToFirestore({
     docRef = await addDoc(collectionPath, {
       userCode_data,
       evaluation_data,
+      dsa_question,
       timestamp: serverTimestamp(),
     });
     console.log("Document operation successful. Document ID: ", docRef.id);

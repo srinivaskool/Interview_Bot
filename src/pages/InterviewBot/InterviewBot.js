@@ -48,6 +48,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
   const chatSectionRef = useRef(null); // Ref to the chat section
   const jumpToBottomButtonRef = useRef(null);
   const [hasUserGivenCode, setHasUserGivenCode] = useState(false);
+  const [latestBotMessage, setLatestBotMessage] = useState("Hey there!");
 
   const [errorMesssage, setErrorMessage] = useState({
     role: "assistant",
@@ -197,17 +198,17 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
   };
 
   async function handleInputSubmit(event) {
-    event.preventDefault();
+      event.preventDefault();
     SpeechRecognition.stopListening();
     if (humanVoiceLThree.trim() !== "") {
       const newUserMessage = {
         role: "user",
-        content: humanVoiceLThree,
+        content: humanVoiceLThree.trim(),
       };
       const newUserMessageTimeStamp = new Date();
       setConversation([...conversation, newUserMessage, loadingMessage]);
       SetTimeStamps([...timeStamps, newUserMessageTimeStamp]);
-      const userReply = humanVoiceLThree;
+      const userReply = humanVoiceLThree.trim();
       setHumanVoiceLThree("");
       setHumanVoiceLOne("");
       setHumanVoiceLTwo("");
@@ -237,7 +238,9 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
     timeStamps: timeStamps,
     setCode: setCode,
     loading: loading,
+    setLatestBotMessage: setLatestBotMessage,
     isThisCodeEvaluation: false,
+    setMainConversationArray: setConversation,
   });
 
   const handleEvaluateCode = handleSendUserResponse({
@@ -253,24 +256,28 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
     timeStamps: timeStamps,
     setCode: setCode,
     loading: loading,
+    setLatestBotMessage: setLatestBotMessage,
     isThisCodeEvaluation: true,
+    setMainConversationArray: setConversation,
   });
 
   const onSubmitCodeHandler = async () => {
     var userCode = code;
+    var botQuestion = latestBotMessage;
     const result = await handleEvaluateCode("evaluateCode");
+    console.log("Dwarak result: ", (result));
     console.log("Dwarak json: ", JSON.parse(result));
     setJsonCodeEvaluatedData(JSON.parse(result));
-    storeThisDataInFirestore(JSON.parse(result), userCode);
+    storeThisDataInFirestore(JSON.parse(result), userCode, botQuestion);
   };
 
-  const storeThisDataInFirestore = async (e, userCode) => {
-    console.log("Dwarak adding to firestore: ", e, "useXCode: ", userCode);
+  const storeThisDataInFirestore = async (e, userCode, botQuestion) => {
     setLoading(true);
     try {
       await addDataToFirestore({
         userCode_data: userCode,
         evaluation_data: e,
+        dsa_question: botQuestion,
         parent_collection: "dsa-code-evaluation",
         parent_document: user.uid,
         child_collection: "interviewBot",
@@ -432,7 +439,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
                 }`}
                 onClick={onSubmitCodeHandler}
               >
-                Submit code{" "}
+                Submit and go to next question{" "}
                 <FontAwesomeIcon
                   icon="fa-solid fa-square-caret-right"
                   style={{ marginLeft: "5px", height: "20px", width: "20px" }}
