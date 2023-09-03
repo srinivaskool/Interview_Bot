@@ -38,7 +38,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route
-          path="/interview"
+          path="/interview/intro"
           element={<InterviewBot isThisDSARoundPage={false} />}
         />
         <Route
