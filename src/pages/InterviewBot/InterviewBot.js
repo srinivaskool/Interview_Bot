@@ -213,35 +213,37 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
     setCode(value);
   }
 
-  const handleSendMessage = handleSendUserResponse(
-    setLoading,
-    setHasUserGivenCode,
-    code,
-    conversation,
-    setSentences,
-    utteranceVoice,
-    synth,
-    setConversation,
-    SetTimeStamps,
-    timeStamps,
-    setCode,
-    loading
-  );
+  const handleSendMessage = handleSendUserResponse({
+    setLoading: setLoading,
+    setHasUserGivenCode: setHasUserGivenCode,
+    code: code,
+    conversation: conversation,
+    setSentences: setSentences,
+    utteranceVoice: utteranceVoice,
+    synth: synth,
+    setConversation: setConversation,
+    SetTimeStamps: SetTimeStamps,
+    timeStamps: timeStamps,
+    setCode: setCode,
+    loading: loading,
+    isThisCodeEvaluation: false,
+  });
 
-  const handleEvaluateCode = handleSendUserResponse(
-    setLoading,
-    setHasUserGivenCode,
-    code,
-    codeEvaluateConversation,
-    setSentences,
-    utteranceVoice,
-    synth,
-    setCodeEvaluateConversation,
-    SetTimeStamps,
-    timeStamps,
-    setCode,
-    loading
-  );
+  const handleEvaluateCode = handleSendUserResponse({
+    setLoading: setLoading,
+    setHasUserGivenCode: setHasUserGivenCode,
+    code: code,
+    conversation: codeEvaluateConversation,
+    setSentences: setSentences,
+    utteranceVoice: utteranceVoice,
+    synth: synth,
+    setConversation: setCodeEvaluateConversation,
+    SetTimeStamps: SetTimeStamps,
+    timeStamps: timeStamps,
+    setCode: setCode,
+    loading: loading,
+    isThisCodeEvaluation: true,
+  });
 
   return (
     <div className="tyn-root">
@@ -257,7 +259,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
       )}
       <div className="tyn-content">
         <NavBar />
-        {/* {JSON.stringify(loadingTrackerInt)} */}
+        {/* {JSON.stringify(codeEvaluateConversation)} */}
         <div className="chat-container">
           <div className=" tyn-main tyn-main-boxed tyn-main-boxed-lg">
             <div className="tyn-chat-body">
@@ -363,7 +365,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
               </form>
             </div>
           </div>
-          <div style={{display : isThisDSARoundPage ? "block" : "none"}}>
+          <div style={{ display: isThisDSARoundPage ? "block" : "none" }}>
             <div className="code-section my-4">
               <Editor
                 value={code}

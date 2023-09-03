@@ -1,4 +1,18 @@
-export function handleSendUserResponse(setLoading, setHasUserGivenCode, code, conversation, setSentences, utteranceVoice, synth, setConversation, SetTimeStamps, timeStamps, setCode, loading) {
+export function handleSendUserResponse({
+  setLoading,
+  setHasUserGivenCode,
+  code,
+  conversation,
+  setSentences,
+  utteranceVoice,
+  synth,
+  setConversation,
+  SetTimeStamps,
+  timeStamps,
+  setCode,
+  loading,
+  isThisCodeEvaluation,
+}) {
   return async (method) => {
     setLoading(true);
     if (method === "Code") {
@@ -7,9 +21,10 @@ export function handleSendUserResponse(setLoading, setHasUserGivenCode, code, co
     try {
       let shouldEvaluateCode = method === "evaluateCode";
       console.log("Dwaraka-method: ", method);
-      let data = method === "Code"
-        ? `//code\n${code}`
-        : method === "evaluateCode"
+      let data =
+        method === "Code"
+          ? `//code\n${code}`
+          : method === "evaluateCode"
           ? `//code\n${code}`
           : method;
       let userMessage = data;
@@ -28,12 +43,12 @@ export function handleSendUserResponse(setLoading, setHasUserGivenCode, code, co
             n: 1,
             messages: shouldEvaluateCode
               ? conversation.concat([
-                {
-                  role: "system",
-                  content: getCodeEvaluationPrompt({}),
-                },
-                { role: "user", content: data },
-              ])
+                  {
+                    role: "system",
+                    content: getCodeEvaluationPrompt({}),
+                  },
+                  { role: "user", content: data },
+                ])
               : conversation.concat([{ role: "user", content: data }]),
             stream: true,
           }),
@@ -69,13 +84,14 @@ export function handleSendUserResponse(setLoading, setHasUserGivenCode, code, co
 
           const json = trimmedLine.replace("data: ", "");
           const obj = JSON.parse(json);
-          const content = obj &&
+          const content =
+            obj &&
             obj.choices &&
             obj.choices[0] &&
             obj.choices[0].delta &&
             obj.choices[0].delta.content
-            ? obj.choices[0].delta.content.toString()
-            : "";
+              ? obj.choices[0].delta.content.toString()
+              : "";
           deltaText = deltaText.concat(content);
         }
         totalString = totalString + deltaText;
@@ -85,7 +101,8 @@ export function handleSendUserResponse(setLoading, setHasUserGivenCode, code, co
           currentSentence,
           setSentences,
           utteranceVoice,
-          synth
+          synth,
+          isThisCodeEvaluation
           // setLoadingTrackerInt,
           // loadingTrackerInt
         );
@@ -150,7 +167,8 @@ export function updateSentences(
   currentSentence,
   setSentences,
   utteranceVoice,
-  synth
+  synth,
+  isThisCodeEvaluation
   // setLoadingTrackerInt,
   // loadingTrackerInt
 ) {
@@ -180,20 +198,15 @@ export function updateSentences(
         ? dCurrentSentence.split(":")[0] + ":"
         : "");
     setSentences((prevSentences) => [...prevSentences, newSentence]);
-
-    setTimeout(() => {
-      const utterance = new SpeechSynthesisUtterance(newSentence);
-      if (utteranceVoice) {
-        utterance.voice = utteranceVoice;
-      }
-      synth.speak(utterance);
-      // setLoadingTrackerInt(loadingTrackerInt - 1);
-      // console.log("Dwaraka load so, ---");
-      // utterance.onend = () => {
-      //   console.log("Dwaraka load done so, +++");
-      //   setLoadingTrackerInt(loadingTrackerInt + 1);
-      // };
-    }, 2000);
+    if (!isThisCodeEvaluation) {
+      setTimeout(() => {
+        const utterance = new SpeechSynthesisUtterance(newSentence);
+        if (utteranceVoice) {
+          utterance.voice = utteranceVoice;
+        }
+        synth.speak(utterance);
+      }, 2000);
+    }
     let d1CurrentSentence = currentSentence + "";
     let d2CurrentSentence =
       (d1CurrentSentence.includes(".") &&
@@ -223,23 +236,23 @@ export function getBasicInterviewPrompt({ role }) {
 
 export function getCodeEvaluationPrompt() {
   console.log("dwaraka-inside evalutate prompt");
-//   return `
-//   You are the interviewer, and I need your evaluation expertise in Data Structures and Algorithms (DSA). I'll provide you with a code snippet related to a DSA question. Your task is to assess the code based on the following five criteria, each rated out of 5:
-  
-//   Evaluate the provided DSA code based on the following criteria, each rated out of 5:
-//   your response should look like this: 
+  //   return `
+  //   You are the interviewer, and I need your evaluation expertise in Data Structures and Algorithms (DSA). I'll provide you with a code snippet related to a DSA question. Your task is to assess the code based on the following five criteria, each rated out of 5:
 
-// "Correctness - X.X/5 : one liner feedback about Correctness 
-// Handling Edge Cases - X.X/5 : one liner feedback about Handling Edge Cases 
-// Code Structure and Readability - X.X/5 : one liner feedback about Code Structure and Readability 
-// Problem Decomposition - X.X/5 : one liner feedback about Problem Decomposition 
-// Algorithm Efficiency - X.X/5 : one liner feedback about Algorithm Efficiency 
-// Overall Code Evaluation - X.X/5 : one liner feedback about Overall Code Evaluation  
+  //   Evaluate the provided DSA code based on the following criteria, each rated out of 5:
+  //   your response should look like this:
 
-// [Provide a concise summary about the overall code quality.]"
-//    `;
+  // "Correctness - X.X/5 : one liner feedback about Correctness
+  // Handling Edge Cases - X.X/5 : one liner feedback about Handling Edge Cases
+  // Code Structure and Readability - X.X/5 : one liner feedback about Code Structure and Readability
+  // Problem Decomposition - X.X/5 : one liner feedback about Problem Decomposition
+  // Algorithm Efficiency - X.X/5 : one liner feedback about Algorithm Efficiency
+  // Overall Code Evaluation - X.X/5 : one liner feedback about Overall Code Evaluation
 
-return `
+  // [Provide a concise summary about the overall code quality.]"
+  //    `;
+
+  return `
 You are the interviewer, and I need your evaluation expertise in Data Structures and Algorithms (DSA). I'll provide you with a code snippet related to a DSA question. Your task is to assess the code based on the following five criteria, each rated out of 5:
 
 Evaluate the provided DSA code based on the following criteria, each rated out of 5. I want this entire response in the form of stringified JSON object
@@ -308,5 +321,5 @@ for your reference, below is the exact example of how your response should look 
 ]
 }
 "
-`
+`;
 }
