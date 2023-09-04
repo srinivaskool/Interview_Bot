@@ -42,6 +42,10 @@
     "presets": ["@babel/preset-env", "@babel/preset-react"],
     "plugins": ["@babel/plugin-proposal-private-property-in-object"]
   },
+  "engines": {
+    "node": "20.5.0",
+    "npm": "9.8.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
