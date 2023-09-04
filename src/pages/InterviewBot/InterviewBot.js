@@ -12,6 +12,7 @@ import SpeechRecognition, {
 import { toast } from "react-toastify";
 import ChatBubble from "../../components/ChatBubble";
 import MainNavBar from "../../components/MainNavBar";
+import ResumeUploadSection from "../../components/ResumeUploadSection/ResumeUploadSection";
 import SpeechSynthesisComp from "../../components/SpeechSynthesisComp";
 import { addDataToFirestore } from "../../supportFunctions.js/FirebaseFunctions";
 import {
@@ -198,7 +199,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
   };
 
   async function handleInputSubmit(event) {
-      event.preventDefault();
+    event.preventDefault();
     SpeechRecognition.stopListening();
     if (humanVoiceLThree.trim() !== "") {
       const newUserMessage = {
@@ -265,7 +266,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
     var userCode = code;
     var botQuestion = latestBotMessage;
     const result = await handleEvaluateCode("evaluateCode");
-    console.log("Dwarak result: ", (result));
+    console.log("Dwarak result: ", result);
     console.log("Dwarak json: ", JSON.parse(result));
     setJsonCodeEvaluatedData(JSON.parse(result));
     storeThisDataInFirestore(JSON.parse(result), userCode, botQuestion);
@@ -446,6 +447,9 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
                 />
               </div>
             </div>
+          </div>
+          <div style={{ display: !isThisDSARoundPage ? "block" : "none" }}>
+            <ResumeUploadSection />
           </div>
         </div>
       </div>
