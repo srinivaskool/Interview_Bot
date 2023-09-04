@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import SpeechRecognition from "react-speech-recognition";
 import ChatBubble from "../ChatBubble";
 import SpeechSynthesisComp from "../SpeechSynthesisComp";
 
