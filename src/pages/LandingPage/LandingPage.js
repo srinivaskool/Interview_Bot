@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../../components/NavBar";
+import MainNavBar from "../../components/MainNavBar";
 import "./LandingPage.css";
 
 const LandingPage = () => {
@@ -16,7 +16,7 @@ const LandingPage = () => {
   }
   return (
     <div className="landingPage">
-      <NavBar />
+      <MainNavBar />
       <main>
         <div className="jumbotron">
           <div className="container">

@@ -11,7 +11,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { toast } from "react-toastify";
 import ChatBubble from "../../components/ChatBubble";
-import NavBar from "../../components/NavBar";
+import MainNavBar from "../../components/MainNavBar";
 import SpeechSynthesisComp from "../../components/SpeechSynthesisComp";
 import { addDataToFirestore } from "../../supportFunctions.js/FirebaseFunctions";
 import {
@@ -302,7 +302,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
         </div>
       )}
       <div className="tyn-content">
-        <NavBar />
+        <MainNavBar />
         {/* {JSON.stringify(codeEvaluateConversation)} */}
         <div className="chat-container">
           <div className=" tyn-main tyn-main-boxed tyn-main-boxed-lg">

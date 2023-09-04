@@ -4,9 +4,9 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "./NavBar.css";
+import "./MainNavBar.css";
 
-export default function NavBar() {
+export default function MainNavBar() {
   const auth = getAuth();
   let dispatch = useDispatch();
   let location = useLocation();
