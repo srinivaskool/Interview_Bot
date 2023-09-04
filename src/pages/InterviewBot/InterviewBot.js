@@ -1,7 +1,6 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Editor from "@monaco-editor/react";
 import { getAuth } from "firebase/auth";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,21 +9,22 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import { toast } from "react-toastify";
-import ChatBubble from "../../components/ChatBubble";
+import CodeInputSection from "../../components/CodeInputSection/CodeInputSection";
+import MainChatSection from "../../components/MainChatSection/MainChatSection";
 import MainNavBar from "../../components/MainNavBar";
 import ResumeUploadSection from "../../components/ResumeUploadSection/ResumeUploadSection";
-import SpeechSynthesisComp from "../../components/SpeechSynthesisComp";
 import { addDataToFirestore } from "../../supportFunctions.js/FirebaseFunctions";
 import {
   getBasicInterviewPrompt,
   getCodeEvaluationPrompt,
   getDSAQuestionStartingPrompt,
+  getResumeRoundPrompt,
   handleSendUserResponse,
 } from "../../supportFunctions.js/InterviewBotFunctions";
 import dsaQuestionsArray from "../../supportFunctions.js/dSAQuestions";
 import "./InterviewBot.css";
 
-const InterviewBot = ({ isThisDSARoundPage }) => {
+const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   const dispatch = useDispatch();
   const auth = getAuth();
   const navigate = useNavigate();
@@ -50,6 +50,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
   const jumpToBottomButtonRef = useRef(null);
   const [hasUserGivenCode, setHasUserGivenCode] = useState(false);
   const [latestBotMessage, setLatestBotMessage] = useState("Hey there!");
+  const [extractedResumeText, setExtractedResumeText] = useState();
 
   const [errorMesssage, setErrorMessage] = useState({
     role: "assistant",
@@ -137,7 +138,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
   }
 
   useEffect(() => {
-    scrollToBottomMessage();
+    if (chatSectionRef.current) scrollToBottomMessage();
   }, [conversation]);
 
   function scrollToBottomMessage() {
@@ -183,6 +184,40 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
       }
     };
   }, []);
+
+  // useEffect(()=>{
+  //   setConversation([
+  //     {
+  //       role: "system",
+  //       content: getResumeRoundPrompt({
+  //         resumeText: extractedResumeText,
+  //       }),
+  //     },
+  //     {
+  //       role: "assistant",
+  //       content: "Hey there!",
+  //     },
+  //   ]);
+  // },[extractedResumeText])
+
+  // Function to update the extractedText state
+  const updateExtractedResumeText = (newText) => {
+    console.log("Dwaraka resume extracted text: ", newText);
+    setConversation([
+      {
+        role: "system",
+        content: getResumeRoundPrompt({
+          resumeText: newText,
+        }),
+      },
+      {
+        role: "assistant",
+        content: "Hello there! Welcome to resume round of this interview",
+      },
+    ]);
+    console.log(conversation.length);
+    setExtractedResumeText(newText);
+  };
 
   function handleJumpToBottomClick() {
     chatSectionRef.current.scrollTop = chatSectionRef.current.scrollHeight;
@@ -293,6 +328,7 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
 
   return (
     <div className="tyn-root">
+      {/* {JSON.stringify(conversation[0])} */}
       {loading && (
         <div className="loadingAnimationContainerDiv">
           <FontAwesomeIcon
@@ -304,153 +340,41 @@ const InterviewBot = ({ isThisDSARoundPage }) => {
       )}
       <div className="tyn-content">
         <MainNavBar />
-        {/* {JSON.stringify(codeEvaluateConversation)} */}
         <div className="chat-container">
-          <div className=" tyn-main tyn-main-boxed tyn-main-boxed-lg">
-            <div className="tyn-chat-body">
-              <div className="subheadings">
-                <p className="my-2" onClick={scrollToBottomMessage}>
-                  Bot{" "}
-                  <SpeechSynthesisComp
-                    utteranceVoiceChange={utteranceVoiceChange}
-                  />
-                </p>
-                <p className="m-2">You</p>
-              </div>
-              <div className="chat-bubbles-section" ref={chatSectionRef}>
-                {conversation
-                  .filter((item) => item.role != "system")
-                  .map((message, index) => (
-                    <ChatBubble
-                      key={index}
-                      message={message.content}
-                      sender={message.role === "assistant" ? "user1" : "user2"}
-                      timeStamp={timeStamps[index + 1]}
-                      scrollToBottomMessage={scrollToBottomMessage}
-                      utteranceVoice={utteranceVoice}
-                      user={user}
-                    />
-                  ))}
-                <div
-                  className="jump-to-bottom-button"
-                  ref={jumpToBottomButtonRef}
-                  onClick={handleJumpToBottomClick}
-                >
-                  <FontAwesomeIcon
-                    icon="fa-solid fa-circle-down"
-                    style={{ color: "#ffffff", marginRight: "5px" }}
-                  />
-                  Jump to bottom
-                </div>
-              </div>
-            </div>
-            <div className=" tyn-chat-form">
-              <form onSubmit={handleInputSubmit} style={{ width: "100%" }}>
-                <div className="tyn-chat-form-enter">
-                  <textarea
-                    type="text"
-                    placeholder="Type a message"
-                    className="tyn-chat-form-input"
-                    autoFocus
-                    rows={1}
-                    disabled={loading}
-                    value={humanVoiceLThree}
-                    onChange={handleInputChange}
-                  />
-                  <div
-                    className={`microphone-icon input-bar-icon ${
-                      loading && "disabledIcon"
-                    }`}
-                    style={{
-                      backgroundColor: `${
-                        listening ? "rgb(191, 219, 254)" : "#fff"
-                      }`,
-                    }}
-                    onClick={() => {
-                      if (!loading) {
-                        setHumanVoiceLTwo(humanVoiceLTwo + humanVoiceLOne);
-                        SpeechRecognition.startListening();
-                      }
-                    }}
-                  >
-                    {listening ? (
-                      <FontAwesomeIcon
-                        icon="fa-solid fa-microphone-lines"
-                        flip
-                        className={`${loading && "disabledIcon"}`}
-                        style={{
-                          color: "#2563eb",
-                          transform: "scale(2.5)",
-                        }}
-                        onClick={() => {
-                          if (!loading) {
-                            SpeechRecognition.stopListening;
-                          }
-                        }}
-                      />
-                    ) : (
-                      <FontAwesomeIcon
-                        className={`${loading && "disabledIcon"}`}
-                        icon="microphone"
-                      />
-                    )}
-                  </div>
-                  <div
-                    className={`send-icon input-bar-icon ${
-                      loading && "disabledIcon"
-                    }`}
-                    onClick={handleInputSubmit}
-                  >
-                    <FontAwesomeIcon
-                      className={`${loading && "disabledIcon"}`}
-                      icon="fa-solid fa-paper-plane"
-                    />
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-          <div style={{ display: isThisDSARoundPage ? "block" : "none" }}>
-            <div className="code-section my-4">
-              <Editor
-                value={code}
-                defaultLanguage="cpp"
-                height={"496px"}
-                theme="vs-dark"
-                defaultValue={code}
-                onChange={handleEditorChange}
+          {isThisResumeRoundPage && !extractedResumeText ? (
+            <ResumeUploadSection onTextExtracted={updateExtractedResumeText} />
+          ) : (
+            <>
+              <MainChatSection
+                scrollToBottomMessage={scrollToBottomMessage}
+                utteranceVoiceChange={utteranceVoiceChange}
+                chatSectionRef={chatSectionRef}
+                conversation={conversation}
+                timeStamps={timeStamps}
+                utteranceVoice={utteranceVoice}
+                user={user}
+                jumpToBottomButtonRef={jumpToBottomButtonRef}
+                handleJumpToBottomClick={handleJumpToBottomClick}
+                handleInputSubmit={handleInputSubmit}
+                loading={loading}
+                humanVoiceLThree={humanVoiceLThree}
+                handleInputChange={handleInputChange}
+                listening={listening}
+                setHumanVoiceLTwo={setHumanVoiceLTwo}
+                humanVoiceLTwo={humanVoiceLTwo}
+                humanVoiceLOne={humanVoiceLOne}
               />
-            </div>
-            <div className=" tyn-chat-form mx-0">
-              <div
-                className={`send-code-button btn btn-sm m-auto ${
-                  (code.trim() == "" || loading) && "disabled"
-                }`}
-                onClick={() => handleSendMessage("Code")}
-              >
-                Run code{" "}
-                <FontAwesomeIcon
-                  icon="fa-solid fa-play"
-                  style={{ marginLeft: "5px", height: "20px", width: "20px" }}
+              <div style={{ display: isThisDSARoundPage ? "block" : "none" }}>
+                <CodeInputSection
+                  code={code}
+                  handleEditorChange={handleEditorChange}
+                  loading={loading}
+                  handleSendMessage={handleSendMessage}
+                  onSubmitCodeHandler={onSubmitCodeHandler}
                 />
               </div>
-              <div
-                className={`send-code-button btn btn-sm m-auto ${
-                  (code.trim() == "" || loading) && "disabled"
-                }`}
-                onClick={onSubmitCodeHandler}
-              >
-                Submit and go to next question{" "}
-                <FontAwesomeIcon
-                  icon="fa-solid fa-square-caret-right"
-                  style={{ marginLeft: "5px", height: "20px", width: "20px" }}
-                />
-              </div>
-            </div>
-          </div>
-          <div style={{ display: !isThisDSARoundPage ? "block" : "none" }}>
-            <ResumeUploadSection />
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>

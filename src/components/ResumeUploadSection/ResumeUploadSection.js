@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./ResumeUploadSection.css";
 
-export default function ResumeUploadSection() {
+export default function ResumeUploadSection({ onTextExtracted }) {
   const [file, setFile] = useState(null);
   const [text, setText] = useState("");
 
@@ -44,29 +44,36 @@ export default function ResumeUploadSection() {
     }
   };
 
+  const handleStartResumeSection = () => {
+    onTextExtracted(text);
+  };
   return (
-    <div className="frame">
-      <div className="center">
-        <div className="title">
+    <div className="resumeUploadSection-frame">
+      <div className="resumeUploadSection-center">
+        <div className="resumeUploadSection-title">
           <h1>Drop your resume to start</h1>
+          {file && <p><strong>File:</strong> {file.name}</p>}
         </div>
-        <div className="dropzone">
+        <div className="resumeUploadSection-dropzone">
           <img
             src="http://100dayscss.com/codepen/upload.svg"
-            className="upload-icon"
+            className="resumeUploadSection-upload-icon"
           />
-          <input type="file" className="upload-input" onChange={onFileChange}/>
+          <input
+            type="file"
+            className="resumeUploadSection-upload-input"
+            onChange={onFileChange}
+          />
         </div>
-        <button type="button" className="btn btn-primary " name="uploadbutton">
+        <button
+          type="button"
+          className="btn btn-primary "
+          name="uploadbutton"
+          disabled = {!file}
+          onClick={handleStartResumeSection}
+        >
           Start the interview
         </button>
-        {file && (
-          <div className="file-info">
-            <p>Selected File: {file.name}</p>
-            <p>Extracted Text:</p>
-            <div className="extracted-text">{text}</div>
-          </div>
-        )}
       </div>
     </div>
   );

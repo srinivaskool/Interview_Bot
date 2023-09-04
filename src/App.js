@@ -39,15 +39,15 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route
           path="/interview/intro"
-          element={<InterviewBot isThisDSARoundPage={false} />}
+          element={<InterviewBot isThisDSARoundPage={false} isThisResumeRoundPage={false}/>}
         />
         <Route
           path="/interview/resume"
-          element={<InterviewBot isThisDSARoundPage={false} />}
+          element={<InterviewBot isThisDSARoundPage={false} isThisResumeRoundPage={true}/>}
         />
         <Route
           path="/interview/dsaaround"
-          element={<InterviewBot isThisDSARoundPage={true} />}
+          element={<InterviewBot isThisDSARoundPage={true} isThisResumeRoundPage={false}/>}
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
