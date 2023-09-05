@@ -1,5 +1,9 @@
 .landingPage main {
-  text-align: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: 0 0;
 }
 
 .landingPage main h1 {
@@ -14,19 +18,34 @@
 }
 
 .landingPage .container {
-  max-width: 940px;
   margin: 0 auto;
   padding: 0 10px;
-  text-align: center;
 }
 
+.landing-card-subheading {
+  color: rgb(71, 85, 105);
+  font-size: 16px;
+  font-weight: 600;
+}
 .landingPage .jumbotron {
-  height: 800px;
-  background-image: url("https://content.codecademy.com/projects/broadway/bg.jpg");
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  height: 100vh;
+  position: relative;
+  background: transparent;
+}
+.tyn-circle {
+  background-color: rgb(226, 232, 240);
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+}
+
+.landingPage .overlayStyle {
+  background-color: rgba(67, 120, 235, 0.3);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
 }
 
 .landingPage .btn-main {
@@ -99,7 +118,7 @@
 }
 
 @media (max-width: 500px) {
- .landingPage main h1 {
+  .landingPage main h1 {
     font-size: 50px;
     padding: 0 40px;
   }

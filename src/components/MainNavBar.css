@@ -39,6 +39,10 @@
   text-size-adjust: 100%;
 }
 
+.tyn-list-links li a:hover{
+  color: rgb(37, 99, 235);
+}
+
 .tyn-appbar-logo {
   display: inline-flex;
   border-right: 1px solid var(--border-color);
@@ -99,6 +103,7 @@
   height: 48px;
   width: 48px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .tyn-appbar-link svg {

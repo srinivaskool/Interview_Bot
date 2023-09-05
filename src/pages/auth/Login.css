@@ -58,8 +58,8 @@ dl {
   width: var(--tyn-icon-size);
 }
 
-img,
-svg {
+.tyn-login-page img,
+.tyn-login-page svg {
   vertical-align: middle;
   fill: rgb(71, 85, 105);
   cursor: pointer;
