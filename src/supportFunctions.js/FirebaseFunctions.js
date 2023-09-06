@@ -1,3 +1,4 @@
+import { child, get, push, ref as ref1, update } from "firebase/database";
 import {
   addDoc,
   collection,
@@ -7,12 +8,63 @@ import {
   query,
   serverTimestamp
 } from "firebase/firestore";
-import { fStore } from "../firebase";
+import { db, fStore } from "../firebase";
+
+export async function updateDataInRealTimeDataBase(
+  data,
+  realTimeDBPath,
+  realTimeDBKey
+) {
+  try {
+    const slidePuzzleRef = ref1(db, realTimeDBPath);
+    const childRef = child(slidePuzzleRef, realTimeDBKey);
+    const updatedData = {
+      ...data,
+    };
+
+    await update(childRef, updatedData);
+    console.log("Value updated successfully!");
+  } catch (error) {
+    console.error("Error updating value:", error);
+  }
+}
+
+export async function addDataToRealTimeDatabase(data, realTimeDBPath) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const newKey = push(ref1(db, realTimeDBPath), {
+        ...data,
+      }).key;
+
+      resolve(newKey);
+    } catch (error) {
+      console.error("Error updating value:", error);
+      reject(error);
+    }
+  });
+}
+
+export function getDataFromRealtimeDatabase(realtimeDataPath) {
+  const todoRef = ref1(db, realtimeDataPath);
+  return new Promise((resolve, reject) => {
+    get(todoRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          resolve(data); // Resolve with the retrieved data
+        } else {
+          resolve(null); // Resolve with null if no data available
+        }
+      })
+      .catch((error) => {
+        reject(error); // Reject with the error if any occurs
+      });
+  });
+}
+
 
 export async function addDataToFirestore({
-  userCode_data,
-  evaluation_data,
-  dsa_question,
+  DSAQuestionsRealTimeDatabaseKeysArray,
   parent_collection,
   parent_document,
   child_collection,
@@ -28,9 +80,7 @@ export async function addDataToFirestore({
   try {
     let docRef;
     docRef = await addDoc(collectionPath, {
-      userCode_data,
-      evaluation_data,
-      dsa_question,
+      DSAQuestionsRealTimeDatabaseKeysArray,
       timestamp: serverTimestamp(),
     });
     console.log("Document operation successful. Document ID: ", docRef.id);

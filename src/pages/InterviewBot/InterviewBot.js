@@ -13,7 +13,10 @@ import CodeInputSection from "../../components/CodeInputSection/CodeInputSection
 import MainChatSection from "../../components/MainChatSection/MainChatSection";
 import MainNavBar from "../../components/MainNavBar";
 import ResumeUploadSection from "../../components/ResumeUploadSection/ResumeUploadSection";
-import { addDataToFirestore } from "../../supportFunctions.js/FirebaseFunctions";
+import {
+  addDataToFirestore,
+  addDataToRealTimeDatabase,
+} from "../../supportFunctions.js/FirebaseFunctions";
 import {
   getBasicInterviewPrompt,
   getCodeEvaluationPrompt,
@@ -51,6 +54,7 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   const [hasUserGivenCode, setHasUserGivenCode] = useState(false);
   const [latestBotMessage, setLatestBotMessage] = useState("Hey there!");
   const [extractedResumeText, setExtractedResumeText] = useState();
+  const [realTimeDatabaseKeys, setRealTimeDatabaseKeys] = useState([]);
 
   const [errorMesssage, setErrorMessage] = useState({
     role: "assistant",
@@ -309,21 +313,57 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
 
   const storeThisDataInFirestore = async (e, userCode, botQuestion) => {
     setLoading(true);
-    try {
-      await addDataToFirestore({
-        userCode_data: userCode,
-        evaluation_data: e,
-        dsa_question: botQuestion,
-        parent_collection: "dsa-code-evaluation",
-        parent_document: user.uid,
-        child_collection: "interviewBot",
+    storeCodeQuestionDataInRealTimeDatabase(e, userCode, botQuestion)
+      .then((newKey) => {
+        if (newKey !== null) {
+          var newArray = [...realTimeDatabaseKeys, newKey];
+          console.log("Dwaraka neArray: ", newArray);
+          addDataToFirestore({
+            DSAQuestionsRealTimeDatabaseKeysArray: newArray,
+            parent_collection: "dsa-code-evaluation",
+            parent_document: user.uid,
+            child_collection: "interviewBot",
+          })
+            .then(() => {
+              setLoading(false);
+              toast.success("added to firestore");
+            })
+            .catch((error) => {
+              console.error("Error Creating Pack: ", error);
+              setLoading(false);
+            });
+        } else {
+          // Handle the case where newKey is null
+        }
+      })
+      .catch((error) => {
+        console.error("Error storing data in Realtime Database: ", error);
+        setLoading(false);
       });
-      setLoading(false);
-      toast.success("added to firestore");
-    } catch (error) {
-      console.error("Error Creating Pack: ", error);
-      setLoading(false);
-    }
+  };
+
+  const storeCodeQuestionDataInRealTimeDatabase = async (
+    e,
+    userCode,
+    botQuestion
+  ) => {
+    setLoading(true);
+    const data = {
+      user_id: user.uid,
+      userCode_data: userCode,
+      evaluation_data: e,
+      dsa_question: botQuestion,
+    };
+    return addDataToRealTimeDatabase(data, "DSAQandAandEvaluation")
+      .then((newKey) => {
+        console.log("New key:", newKey);
+        setRealTimeDatabaseKeys([...realTimeDatabaseKeys, newKey]);
+        return newKey;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        return null;
+      });
   };
 
   return (
