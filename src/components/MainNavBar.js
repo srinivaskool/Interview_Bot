@@ -70,7 +70,10 @@ export default function MainNavBar() {
           <div className="tyn-appbar-content">
             <ul className="tyn-appbar-nav tyn-appbar-nav-start">
               <li className="tyn-appbar-item">
-                <span className="tyn-appbar-link" onClick={() => updateRedirectRedux("/interview/intro")}>
+                <span
+                  className="tyn-appbar-link"
+                  onClick={() => updateRedirectRedux("/interview/intro")}
+                >
                   {/* person-lines-fill */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +89,10 @@ export default function MainNavBar() {
                 </span>
               </li>
               <li className="tyn-appbar-item">
-                <span className="tyn-appbar-link" onClick={() => updateRedirectRedux("/interview/resume")}>
+                <span
+                  className="tyn-appbar-link"
+                  onClick={() => updateRedirectRedux("/interview/resume")}
+                >
                   {/* chat-text-fill */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -136,6 +142,8 @@ export default function MainNavBar() {
                       src={
                         user
                           ? user.profilepic
+                            ? user.profilepic
+                            : "https://png.pngtree.com/element_our/sm/20180516/sm_5afc60f232478.png"
                           : "https://png.pngtree.com/element_our/sm/20180516/sm_5afc60f232478.png"
                       }
                       alt=""

@@ -16,6 +16,7 @@ import ResumeUploadSection from "../../components/ResumeUploadSection/ResumeUplo
 import {
   addDataToFirestore,
   addDataToRealTimeDatabase,
+  updateFirestoreVariable,
 } from "../../supportFunctions.js/FirebaseFunctions";
 import {
   getBasicInterviewPrompt,
@@ -55,6 +56,7 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   const [latestBotMessage, setLatestBotMessage] = useState("Hey there!");
   const [extractedResumeText, setExtractedResumeText] = useState();
   const [realTimeDatabaseKeys, setRealTimeDatabaseKeys] = useState([]);
+  const [thisDSARoundFirestoreID, setThisDSARoundFirestoreID] = useState();
 
   const [errorMesssage, setErrorMessage] = useState({
     role: "assistant",
@@ -314,30 +316,40 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   const storeThisDataInFirestore = async (e, userCode, botQuestion) => {
     setLoading(true);
     storeCodeQuestionDataInRealTimeDatabase(e, userCode, botQuestion)
-      .then((newKey) => {
+      .then(async (newKey) => {
         if (newKey !== null) {
           var newArray = [...realTimeDatabaseKeys, newKey];
           console.log("Dwaraka neArray: ", newArray);
-          addDataToFirestore({
-            DSAQuestionsRealTimeDatabaseKeysArray: newArray,
-            parent_collection: "dsa-code-evaluation",
-            parent_document: user.uid,
-            child_collection: "interviewBot",
-          })
-            .then(() => {
-              setLoading(false);
-              toast.success("added to firestore");
-            })
-            .catch((error) => {
-              console.error("Error Creating Pack: ", error);
-              setLoading(false);
+          if (!thisDSARoundFirestoreID) {
+            const thisDSARoundID = await addDataToFirestore({
+              DSAQuestionsRealTimeDatabaseKeysArray: newArray,
+              parent_collection: "dsa-code-evaluation",
+              parent_document: user.uid,
+              child_collection: "interviewBot",
             });
+            setThisDSARoundFirestoreID(thisDSARoundID);
+            console.log(
+              "DWarakaaaa const thisDSARoundID = await: ",
+              thisDSARoundID
+            );
+          } else {
+            await updateFirestoreVariable({
+              parent_collection: "dsa-code-evaluation",
+              parent_document: user.uid,
+              child_collection: "interviewBot",
+              child_document: thisDSARoundFirestoreID,
+              variableToUpdate: "DSAQuestionsRealTimeDatabaseKeysArray",
+              updatedValue: newArray,
+            });
+          }
+          setLoading(false);
+          toast.success("added to firestore");
         } else {
           // Handle the case where newKey is null
         }
       })
       .catch((error) => {
-        console.error("Error storing data in Realtime Database: ", error);
+        console.error("Error: ", error);
         setLoading(false);
       });
   };

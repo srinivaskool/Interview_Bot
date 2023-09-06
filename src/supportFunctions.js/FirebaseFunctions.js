@@ -2,11 +2,13 @@ import { child, get, push, ref as ref1, update } from "firebase/database";
 import {
   addDoc,
   collection,
+  doc,
   getDoc,
   getDocs,
   orderBy,
   query,
-  serverTimestamp
+  serverTimestamp,
+  updateDoc
 } from "firebase/firestore";
 import { db, fStore } from "../firebase";
 
@@ -88,6 +90,37 @@ export async function addDataToFirestore({
   } catch (error) {
     console.error("Error performing document operation: ", error);
     return null;
+  }
+}
+
+export async function updateFirestoreVariable({
+  parent_collection,
+  parent_document,
+  child_collection,
+  child_document,
+  variableToUpdate,
+  updatedValue,
+}) {
+  var documentRef;
+  if (child_collection) {
+    documentRef = doc(
+      fStore,
+      parent_collection,
+      parent_document,
+      child_collection,
+      child_document
+    );
+  } else {
+    documentRef = doc(fStore, parent_collection, parent_document);
+  }
+
+  try {
+    await updateDoc(documentRef, {
+      [variableToUpdate]: updatedValue,
+    });
+    console.log("Document updated successfully");
+  } catch (error) {
+    console.error("Error updating document: ", error);
   }
 }
 
