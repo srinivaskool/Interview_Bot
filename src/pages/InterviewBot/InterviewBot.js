@@ -150,6 +150,19 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   }
 
   useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = ''; // This is required for the alert to be shown in some browsers
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
     if (chatSectionRef.current) scrollToBottomMessage();
   }, [conversation]);
 
