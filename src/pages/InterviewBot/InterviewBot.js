@@ -44,7 +44,7 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
 
   useEffect(() => {
     setStartThisRound(false);
-    setLoading(false)
+    setLoading(false);
   }, [isThisDSARoundPage, isThisResumeRoundPage]);
 
   const [code, setCode] = useState("");
@@ -190,7 +190,6 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
 
   // Function to update the extractedText state
   const updateExtractedResumeText = (newText) => {
-    console.log("Dwaraka resume extracted text: ", newText);
     isThisResumeRoundPage
       ? setConversation([
           {
@@ -237,6 +236,17 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
     console.log(conversation.length);
     setExtractedResumeText(newText);
     setStartThisRound(true);
+    const utterance = new SpeechSynthesisUtterance(
+      isThisResumeRoundPage
+        ? "Hello there! Shall we start the resume round of this interview"
+        : isThisDSARoundPage
+        ? "Hello there! Shall we start the DSA round of this interview"
+        : "Hello there! Shall we start the interview"
+    );
+    if (utteranceVoice) {
+      utterance.voice = utteranceVoice;
+    }
+    synth.speak(utterance);
   };
 
   function handleJumpToBottomClick() {
