@@ -42,6 +42,11 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
     });
   }, [navigate, user]);
 
+  useEffect(() => {
+    setStartThisRound(false);
+    setLoading(false)
+  }, [isThisDSARoundPage, isThisResumeRoundPage]);
+
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   // const [loadingTrackerInt, setLoadingTrackerInt] = useState(0);
@@ -57,6 +62,7 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   const [extractedResumeText, setExtractedResumeText] = useState();
   const [realTimeDatabaseKeys, setRealTimeDatabaseKeys] = useState([]);
   const [thisDSARoundFirestoreID, setThisDSARoundFirestoreID] = useState();
+  const [startThisRound, setStartThisRound] = useState(false);
 
   const [errorMesssage, setErrorMessage] = useState({
     role: "assistant",
@@ -156,73 +162,81 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
     setHumanVoiceLThree(humanVoiceLTwo + " " + transcript);
   }, [transcript]);
 
-  // useEffect(() => {
-  //   console.log("dwaraka loadint changed in useeffect");
-  //   if (loadingTrackerInt < 0) {
-  //     console.log("dwaraka loadint changed in useeffect decrease");
-  //     setLoading(true);
-  //   } else {
-  //     console.log("dwaraka loadint changed in useeffect increased");
-  //     setLoading(false);
-  //   }
-  // }, [loadingTrackerInt]);
-
   useEffect(() => {
     // Display the "Jump to bottom" button if scrolled up
-    const handleScroll = () => {
-      if (
-        chatSectionRef.current.scrollTop <
-        chatSectionRef.current.scrollHeight -
-          chatSectionRef.current.clientHeight -
-          100
-      ) {
-        jumpToBottomButtonRef.current.classList.add("show");
-      } else {
-        jumpToBottomButtonRef.current.classList.remove("show");
-      }
-    };
     if (chatSectionRef.current) {
-      chatSectionRef.current.addEventListener("scroll", handleScroll);
-    }
-    return () => {
+      const handleScroll = () => {
+        if (
+          chatSectionRef.current.scrollTop <
+          chatSectionRef.current.scrollHeight -
+            chatSectionRef.current.clientHeight -
+            100
+        ) {
+          jumpToBottomButtonRef.current.classList.add("show");
+        } else {
+          jumpToBottomButtonRef.current.classList.remove("show");
+        }
+      };
       if (chatSectionRef.current) {
-        chatSectionRef.current.removeEventListener("scroll", handleScroll);
+        chatSectionRef.current.addEventListener("scroll", handleScroll);
       }
-    };
+      return () => {
+        if (chatSectionRef.current) {
+          chatSectionRef.current.removeEventListener("scroll", handleScroll);
+        }
+      };
+    }
   }, []);
-
-  // useEffect(()=>{
-  //   setConversation([
-  //     {
-  //       role: "system",
-  //       content: getResumeRoundPrompt({
-  //         resumeText: extractedResumeText,
-  //       }),
-  //     },
-  //     {
-  //       role: "assistant",
-  //       content: "Hey there!",
-  //     },
-  //   ]);
-  // },[extractedResumeText])
 
   // Function to update the extractedText state
   const updateExtractedResumeText = (newText) => {
     console.log("Dwaraka resume extracted text: ", newText);
-    setConversation([
-      {
-        role: "system",
-        content: getResumeRoundPrompt({
-          resumeText: newText,
-        }),
-      },
-      {
-        role: "assistant",
-        content: "Hello there! Welcome to resume round of this interview",
-      },
-    ]);
+    isThisResumeRoundPage
+      ? setConversation([
+          {
+            role: "system",
+            content: getResumeRoundPrompt({
+              resumeText: newText,
+            }),
+          },
+          {
+            role: "assistant",
+            content:
+              "Hello there! Shall we start the resume round of this interview",
+          },
+        ])
+      : isThisDSARoundPage
+      ? setConversation([
+          {
+            role: "system",
+            content: getDSAQuestionStartingPrompt({
+              question:
+                dsaQuestionsArray[
+                  Math.floor(Math.random() * dsaQuestionsArray.length)
+                ],
+            }),
+          },
+          {
+            role: "assistant",
+            content:
+              "Hello there! Shall we start the DSA round of this interview",
+          },
+        ])
+      : setConversation([
+          {
+            role: "system",
+            content: getBasicInterviewPrompt({
+              role: "Junior Software Engineer position",
+            }),
+          },
+          {
+            role: "assistant",
+            content: "Hello there! Shall we start the interview",
+          },
+        ]);
     console.log(conversation.length);
     setExtractedResumeText(newText);
+    setStartThisRound(true);
   };
 
   function handleJumpToBottomClick() {
@@ -393,8 +407,12 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
       <div className="tyn-content">
         <MainNavBar />
         <div className="chat-container">
-          {isThisResumeRoundPage && !extractedResumeText ? (
-            <ResumeUploadSection onTextExtracted={updateExtractedResumeText} />
+          {!startThisRound ? (
+            <ResumeUploadSection
+              onTextExtracted={updateExtractedResumeText}
+              isResumeRound={isThisResumeRoundPage}
+              isDsaRound={isThisDSARoundPage}
+            />
           ) : (
             <>
               <MainChatSection

@@ -7,7 +7,6 @@
   border-radius: 8px;
   margin: 24px 0;
   background: linear-gradient(rgb(171, 203, 245) 0%, rgb(171, 203, 245) 90%);
-  /* background: linear-gradient(135deg, rgb(37, 99, 235), rgb(239, 246, 255), rgb(219, 234, 254), #fff); */
   color: #333;
   font-family: "Open Sans", Helvetica, sans-serif;
 }
@@ -21,7 +20,7 @@
   height: 260px;
   border-radius: 3px;
   box-shadow: 8px 10px 15px 0 rgba(0, 0, 0, 0.1);
-  background: #fff;
+  background: #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -47,11 +46,13 @@
 }
 
 .resumeUploadSection-dropzone {
-  width: 100px;
-  height: 80px;
-  border: 1px dashed #999;
+  height: 150px;
   border-radius: 3px;
   text-align: center;
+}
+
+.resumeUploadImage{
+  cursor: pointer;
 }
 
 .resumeUploadSection-upload-icon {
@@ -65,4 +66,5 @@
   width: 100%;
   height: 100%;
   opacity: 0;
+  cursor: pointer;
 }

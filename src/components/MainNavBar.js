@@ -19,6 +19,7 @@ export default function MainNavBar() {
       payload: destination,
     });
     navigate(destination);
+    window.location.reload();
   }
 
   let { user } = useSelector((state) => ({ ...state }));

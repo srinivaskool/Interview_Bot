@@ -91,7 +91,7 @@ const LandingPage = () => {
                                 <span>Skills Assessment</span>
                               </li>
                               <li className="d-flex gap gap-2">
-                                <span>
+                                <span className="text-success">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width={16}
