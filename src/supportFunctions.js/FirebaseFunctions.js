@@ -8,7 +8,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import { db, fStore } from "../firebase";
 
@@ -31,14 +31,28 @@ export async function updateDataInRealTimeDataBase(
   }
 }
 
-export async function addDataToRealTimeDatabase(data, realTimeDBPath) {
+export async function addDataToRealTimeDatabase(data, realTimeDBPath, userId) {
   return new Promise(async (resolve, reject) => {
     try {
-      const newKey = push(ref1(db, realTimeDBPath), {
-        ...data,
-      }).key;
+      if (!userId) {
+        const newKey = push(ref1(db, realTimeDBPath), {
+          ...data,
+        }).key;
+        resolve(newKey);
+      } else {
+        // Check if the userId already exists in the database
+        const keyRef = child(ref1(db, realTimeDBPath), userId);
+        const snapshot = await get(keyRef);
 
-      resolve(newKey);
+        if (snapshot.exists()) {
+          // If the userId exists, do nothing and resolve with the existing userId
+          resolve(userId);
+        } else {
+          // If the key doesn't exist, update the data at that key
+          await update(ref1(db, `${realTimeDBPath}/${userId}`), data);
+          resolve(userId);
+        }
+      }
     } catch (error) {
       console.error("Error updating value:", error);
       reject(error);

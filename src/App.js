@@ -25,6 +25,7 @@ const App = () => {
             token: idTokenResult.token,
             uid: user.uid,
             profilepic: user.photoURL,
+            displayName: user.displayName
           },
         });
       }

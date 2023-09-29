@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { auth } from "../../firebase";
+import { addDataToRealTimeDatabase } from "../../supportFunctions.js/FirebaseFunctions";
 import "./Login.css";
 
 export const handleGoogleLogin = async (dispatch, navigate, redirectPage) => {
@@ -23,8 +24,18 @@ export const handleGoogleLogin = async (dispatch, navigate, redirectPage) => {
         token: idTokenResult.token,
         uid: user.uid,
         profilepic: user.photoURL,
+        displayName: user.displayName
       },
     });
+    const data = {
+      user_id: user.uid,
+      email: user.email,
+      profilepic: user.photoURL,
+      displayName: user.displayName,
+      credits: 1000
+    };
+
+    addDataToRealTimeDatabase(data, "AllUsersData", user.uid)
 
     navigate(redirectPage);
     toast.success(`Login successfull`);
@@ -58,6 +69,7 @@ const Login = () => {
           token: idTokenResult.token,
           uid: user.uid,
           profilepic: user.photoURL,
+          displayName: user.displayName
         },
       });
       navigate(redirectPage);

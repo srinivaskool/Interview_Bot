@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { auth } from "../../firebase";
+import { addDataToRealTimeDatabase } from "../../supportFunctions.js/FirebaseFunctions";
 import { handleGoogleLogin } from "./Login";
 
 export default function Register() {
@@ -17,6 +18,7 @@ export default function Register() {
   let dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
+  const [userDisplayName, setUserDisplayName] = useState("");
   const [isThisRegisterCompletePage, setIsThisRegisterCompletePage] =
     useState(false);
   const [password, setPassword] = useState("");
@@ -36,9 +38,9 @@ export default function Register() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if(!tAndCAgreed){
-      toast.error('Please check out terms and conditions');
-      return
+    if (!tAndCAgreed) {
+      toast.error("Please check out terms and conditions");
+      return;
     }
     if (isThisRegisterCompletePage) {
       handleCompleteRegistration(e);
@@ -65,8 +67,8 @@ export default function Register() {
   };
 
   const handleCompleteRegistration = async (e) => {
-    if (!email || !password) {
-      toast.error("Email and password is required");
+    if (!email || !password || !userDisplayName) {
+      toast.error("Email, password and User name are required");
       return;
     }
     if (password.length < 6) {
@@ -86,7 +88,7 @@ export default function Register() {
           toast.success("Registration succesful");
         });
         const idTokenResult = await user.getIdTokenResult();
-
+        
         // redux store
         dispatch({
           type: "LOGGED_IN_USER",
@@ -94,9 +96,19 @@ export default function Register() {
             email: user.email,
             token: idTokenResult.token,
             uid: user.uid,
-            profilepic: user.photoURL,
+            profilepic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&usqp=CAU",
+            displayName: userDisplayName,
           },
         });
+        const data = {
+          user_id: user.uid,
+          email: user.email,
+          profilepic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&usqp=CAU",
+          displayName: userDisplayName,
+          credits: 1000
+        };
+
+        addDataToRealTimeDatabase(data, "AllUsersData", user.uid)
 
         // redirect
         navigate("/");
@@ -150,6 +162,10 @@ export default function Register() {
                                 type="text"
                                 className="form-control"
                                 id="username"
+                                value={userDisplayName}
+                                onChange={(e) =>
+                                  setUserDisplayName(e.target.value)
+                                }
                                 placeholder="yourname"
                               />
                             </div>
@@ -229,7 +245,9 @@ export default function Register() {
                           >
                             {" "}
                             I agree with{" "}
-                            <span className="text-primary">privacy policy &amp; terms</span>
+                            <span className="text-primary">
+                              privacy policy &amp; terms
+                            </span>
                           </label>
                         </div>
                       </div>
@@ -254,7 +272,13 @@ export default function Register() {
                           <li className="flex-grow-1">
                             <button
                               className="btn btn-light w-100"
-                              onClick={() => handleGoogleLogin(dispatch, navigate, redirectPage)}
+                              onClick={() =>
+                                handleGoogleLogin(
+                                  dispatch,
+                                  navigate,
+                                  redirectPage
+                                )
+                              }
                             >
                               {/* google */}
                               <svg
