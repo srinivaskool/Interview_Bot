@@ -10,6 +10,7 @@ export default function ResumeUploadSection({
   onTextExtracted,
   isResumeRound,
   isDsaRound,
+  isADSAQuestionDone,
 }) {
   const [file, setFile] = useState(null);
   const [text, setText] = useState("");

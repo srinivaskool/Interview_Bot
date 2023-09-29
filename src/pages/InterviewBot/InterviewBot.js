@@ -44,6 +44,7 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
 
   useEffect(() => {
     setStartThisRound(false);
+    setIsADSAQuestionDone(false);
     setLoading(false);
   }, [isThisDSARoundPage, isThisResumeRoundPage]);
 
@@ -63,6 +64,7 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   const [realTimeDatabaseKeys, setRealTimeDatabaseKeys] = useState([]);
   const [thisDSARoundFirestoreID, setThisDSARoundFirestoreID] = useState();
   const [startThisRound, setStartThisRound] = useState(false);
+  const [isADSAQuestionDone, setIsADSAQuestionDone] = useState(false);
 
   const [errorMesssage, setErrorMessage] = useState({
     role: "assistant",
@@ -152,13 +154,13 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
-      e.returnValue = ''; // This is required for the alert to be shown in some browsers
+      e.returnValue = ""; // This is required for the alert to be shown in some browsers
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
@@ -203,55 +205,83 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
 
   // Function to update the extractedText state
   const updateExtractedResumeText = (newText) => {
-    isThisResumeRoundPage
-      ? setConversation([
-          {
-            role: "system",
-            content: getResumeRoundPrompt({
-              resumeText: newText,
-            }),
-          },
-          {
-            role: "assistant",
-            content:
-              "Hello there! Shall we start the resume round of this interview",
-          },
-        ])
-      : isThisDSARoundPage
-      ? setConversation([
-          {
-            role: "system",
-            content: getDSAQuestionStartingPrompt({
-              question:
-                dsaQuestionsArray[
-                  Math.floor(Math.random() * dsaQuestionsArray.length)
-                ],
-            }),
-          },
-          {
-            role: "assistant",
-            content:
-              "Hello there! Shall we start the DSA round of this interview",
-          },
-        ])
-      : setConversation([
-          {
-            role: "system",
-            content: getBasicInterviewPrompt({
-              role: "Junior Software Engineer position",
-            }),
-          },
-          {
-            role: "assistant",
-            content: "Hello there! Shall we start the interview",
-          },
-        ]);
+    console.log("Dwaraka starting convo after 1 DSA question");
+    if (isADSAQuestionDone) {
+      setConversation([
+        {
+          role: "system",
+          content: getDSAQuestionStartingPrompt({
+            question:
+              dsaQuestionsArray[
+                Math.floor(Math.random() * dsaQuestionsArray.length)
+              ],
+          }),
+        },
+        {
+          role: "assistant",
+          content: "Are you ready for the next question?",
+        },
+      ]);
+      console.log("Dwaraka setting convo after 1 DSA question");
+      setCodeEvaluateConversation([
+        {
+          role: "system",
+          content: getCodeEvaluationPrompt(),
+        },
+      ]);
+      SetTimeStamps([new Date(), new Date()]);
+    } else {
+      isThisResumeRoundPage
+        ? setConversation([
+            {
+              role: "system",
+              content: getResumeRoundPrompt({
+                resumeText: newText,
+              }),
+            },
+            {
+              role: "assistant",
+              content:
+                "Hello there! Shall we start the resume round of this interview",
+            },
+          ])
+        : isThisDSARoundPage
+        ? setConversation([
+            {
+              role: "system",
+              content: getDSAQuestionStartingPrompt({
+                question:
+                  dsaQuestionsArray[
+                    Math.floor(Math.random() * dsaQuestionsArray.length)
+                  ],
+              }),
+            },
+            {
+              role: "assistant",
+              content:
+                "Hello there! Shall we start the DSA round of this interview",
+            },
+          ])
+        : setConversation([
+            {
+              role: "system",
+              content: getBasicInterviewPrompt({
+                role: "Junior Software Engineer position",
+              }),
+            },
+            {
+              role: "assistant",
+              content: "Hello there! Shall we start the interview",
+            },
+          ]);
+    }
     console.log(conversation.length);
     setExtractedResumeText(newText);
-    setStartThisRound(true);
     const utterance = new SpeechSynthesisUtterance(
       isThisResumeRoundPage
         ? "Hello there! Shall we start the resume round of this interview"
+        : isADSAQuestionDone
+        ? "Are you ready for the next question?"
         : isThisDSARoundPage
         ? "Hello there! Shall we start the DSA round of this interview"
         : "Hello there! Shall we start the interview"
@@ -260,6 +290,8 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
       utterance.voice = utteranceVoice;
     }
     synth.speak(utterance);
+    setStartThisRound(true);
+    setIsADSAQuestionDone(false);
   };
 
   function handleJumpToBottomClick() {
@@ -320,6 +352,8 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
     setLatestBotMessage: setLatestBotMessage,
     isThisCodeEvaluation: false,
     setMainConversationArray: setConversation,
+    setStartThisRound: setStartThisRound,
+    setIsADSAQuestionDone: setIsADSAQuestionDone,
   });
 
   const handleEvaluateCode = handleSendUserResponse({
@@ -338,6 +372,8 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
     setLatestBotMessage: setLatestBotMessage,
     isThisCodeEvaluation: true,
     setMainConversationArray: setConversation,
+    setStartThisRound: setStartThisRound,
+    setIsADSAQuestionDone: setIsADSAQuestionDone,
   });
 
   const onSubmitCodeHandler = async () => {
@@ -417,7 +453,6 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
 
   return (
     <div className="tyn-root">
-      {/* {JSON.stringify(conversation[0])} */}
       {loading && (
         <div className="loadingAnimationContainerDiv">
           <FontAwesomeIcon
@@ -435,6 +470,7 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
               onTextExtracted={updateExtractedResumeText}
               isResumeRound={isThisResumeRoundPage}
               isDsaRound={isThisDSARoundPage}
+              isADSAQuestionDone={isADSAQuestionDone}
             />
           ) : (
             <>

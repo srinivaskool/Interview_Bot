@@ -1,4 +1,3 @@
-import dsaQuestionsArray from "./dSAQuestions";
 
 export function handleSendUserResponse({
   setLoading,
@@ -16,6 +15,8 @@ export function handleSendUserResponse({
   setLatestBotMessage,
   isThisCodeEvaluation,
   setMainConversationArray,
+  setStartThisRound,
+  setIsADSAQuestionDone
 }) {
   return async (method) => {
     setLoading(true);
@@ -128,7 +129,9 @@ export function handleSendUserResponse({
               timeStamps,
               setLatestBotMessage,
               isThisCodeEvaluation,
-              setMainConversationArray
+              setMainConversationArray,
+              setStartThisRound,
+              setIsADSAQuestionDone
             );
           }, 2000);
         }
@@ -155,7 +158,9 @@ export function updateConversationArrays(
   timeStamps,
   setLatestBotMessage,
   isThisCodeEvaluation,
-  setMainConversationArray
+  setMainConversationArray,
+  setStartThisRound,
+  setIsADSAQuestionDone
 ) {
   const newUserMessageTimeStamp = new Date();
   const newUserMessage = {
@@ -176,27 +181,8 @@ export function updateConversationArrays(
       newAssistantMessageTimeStamp,
     ]);
   } else {
-    const newSystemMessage = {
-      role: "system",
-      content: getDSAQuestionStartingPrompt({
-        question:
-          dsaQuestionsArray[
-            Math.floor(Math.random() * dsaQuestionsArray.length)
-          ],
-      }),
-    };
-    const newAssistantMessage = {
-      role: "assistant",
-      content: "Are you ready for the next question?",
-    };
-    setMainConversationArray([newSystemMessage, newAssistantMessage]);
-    setConversation([
-      {
-        role: "system",
-        content: getCodeEvaluationPrompt(),
-      },
-    ]);
-    SetTimeStamps([new Date(), new Date()]);
+    setStartThisRound(false)
+    setIsADSAQuestionDone(true)
   }
 }
 
