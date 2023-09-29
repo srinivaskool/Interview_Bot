@@ -468,6 +468,7 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
           {!startThisRound ? (
             <ResumeUploadSection
               onTextExtracted={updateExtractedResumeText}
+              loading={loading}
               isResumeRound={isThisResumeRoundPage}
               isDsaRound={isThisDSARoundPage}
               isADSAQuestionDone={isADSAQuestionDone}

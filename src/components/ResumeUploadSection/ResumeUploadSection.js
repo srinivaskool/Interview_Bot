@@ -1,6 +1,9 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import Lottie from "react-lottie";
 import documentAnimation from "../../Images/documentAnimation.json";
+import doneAnimation from "../../Images/doneAnimation.json";
+import evaluatingAnimation from "../../Images/evaluatingAnimation.json";
 import resumeScan from "../../Images/resumeScan.gif";
 import robotHiAnimation from "../../Images/robotHiAnimation.json";
 import robotThinkingAnimation from "../../Images/robotThinkingAnimation.json";
@@ -8,6 +11,7 @@ import "./ResumeUploadSection.css";
 
 export default function ResumeUploadSection({
   onTextExtracted,
+  loading,
   isResumeRound,
   isDsaRound,
   isADSAQuestionDone,
@@ -17,7 +21,11 @@ export default function ResumeUploadSection({
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: isDsaRound
+    animationData: loading
+      ? evaluatingAnimation
+      : isADSAQuestionDone
+      ? doneAnimation
+      : isDsaRound
       ? robotThinkingAnimation
       : isResumeRound
       ? documentAnimation
@@ -95,7 +103,11 @@ export default function ResumeUploadSection({
         )}
         {isResumeRound && (
           <div className="resumeUploadSection-dropzone">
-            <img className="resumeUploadImage mt-1" src={resumeScan} style={{ width: "150px" }} />
+            <img
+              className="resumeUploadImage mt-1"
+              src={resumeScan}
+              style={{ width: "150px" }}
+            />
             <input
               type="file"
               className="resumeUploadSection-upload-input"
@@ -110,7 +122,13 @@ export default function ResumeUploadSection({
           disabled={!file && isResumeRound}
           onClick={handleStartResumeSection}
         >
-          Lets get Started
+          {loading ? (
+            <FontAwesomeIcon icon="fa-solid fa-spinner" spin spinReverse />
+          ) : isADSAQuestionDone ? (
+            "Go to next question"
+          ) : (
+            "Lets get Started"
+          )}
         </button>
       </div>
     </div>
