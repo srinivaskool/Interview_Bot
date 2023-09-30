@@ -66,3 +66,36 @@
 .css-lfwcke-MuiTabs-flexContainer{
     width: 350px;
 }
+.css-xkn2kk-QuestionItemContainer {
+    border-bottom: 1px solid rgb(238, 238, 238);
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 10px 20px;
+}.css-1n4xofq-QuestionItemInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    padding: 0px 15px;
+}.css-cwdo40-QuestionItemDetails {
+    flex: 0 0 auto;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1890ff;
+}.css-12tgxhh-QuestionLink {
+    font-weight: 500;
+    font-size: 16px;
+    color: rgb(33, 33, 33);
+    transition: all 0.18s ease-in-out 0s;
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+}.css-1n4xofq-QuestionItemInfo > * {
+    padding: 1px 0px;
+}.css-vjt3mz-TestcaseProgressContainer {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}.css-oqomka-TestcaseProgressDetails {
+    font-size: 12px;
+}

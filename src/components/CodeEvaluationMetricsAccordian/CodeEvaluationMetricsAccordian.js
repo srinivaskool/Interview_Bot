@@ -17,20 +17,6 @@ export default function CodeEvaluationMetricsAccordian({ ratingsData }) {
   const dsaQuestion = ratingsData.dsa_question.content;
   const evaluationRatings = ratingsData.evaluation_data.Ratings;
 
-  function getOverAllRating() {
-    var ratingSum = 0;
-    {
-      Object.keys(evaluationRatings).map((ratingKey, index) => {
-        if (typeof evaluationRatings[ratingKey] === "object") {
-          ratingSum += parseFloat(
-            evaluationRatings[ratingKey].rating.split("/")[0]
-          );
-        }
-      });
-    }
-    return ratingSum / 6;
-  }
-
   return (
     <div className="metrics-accordian-frame">
       <Accordion
@@ -98,34 +84,7 @@ export default function CodeEvaluationMetricsAccordian({ ratingsData }) {
               </AccordionDetails>
             </Accordion>
           );
-        } else {
-          return (
-            <Accordion
-              expanded={expanded === `panel${index}`}
-              onChange={handleChange(`panel${index}`)}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-              >
-                <Typography variant="h6" sx={{ width: "40%", flexShrink: 0 }}>
-                  {ratingKey}
-                </Typography>
-                <StarRatings
-                  rating={getOverAllRating()}
-                  starDimension="24px"
-                  starRatedColor={getStarColor(getOverAllRating())}
-                  numberOfStars={5}
-                  name={""}
-                />
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>{evaluationRatings[ratingKey]}</Typography>
-              </AccordionDetails>
-            </Accordion>
-          );
-        }
+        } 
       })}
     </div>
   );
