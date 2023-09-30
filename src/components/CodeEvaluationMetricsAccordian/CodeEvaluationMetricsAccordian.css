@@ -1,0 +1,9 @@
+.metrics-accordian-frame {
+    margin: 24px 0;
+    padding: 12px;
+    color: #333;
+    width: 45vw;
+    /* border-radius: 8px; */
+    font-family: "Open Sans", Helvetica, sans-serif;
+    background: linear-gradient(rgb(171, 203, 245) 0%, rgb(171, 203, 245) 90%);
+}

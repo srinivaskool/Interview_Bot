@@ -9,6 +9,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import { toast } from "react-toastify";
+import CodeEvaluationMetricsAccordian from "../../components/CodeEvaluationMetricsAccordian/CodeEvaluationMetricsAccordian";
 import CodeInputSection from "../../components/CodeInputSection/CodeInputSection";
 import MainChatSection from "../../components/MainChatSection/MainChatSection";
 import MainNavBar from "../../components/MainNavBar";
@@ -65,6 +66,10 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   const [thisDSARoundFirestoreID, setThisDSARoundFirestoreID] = useState();
   const [startThisRound, setStartThisRound] = useState(false);
   const [isADSAQuestionDone, setIsADSAQuestionDone] = useState(false);
+  const [dsaQuestionCount, setDsaQuestionCount] = useState(0);
+  const [isDoneWithDSARound, setIsDoneWithDSARound] = useState(false);
+  const [dsaAllQuestionsData, setDsaAllQuestionsData] = useState([]);
+  const [totalNumberDSAQuestions, setTotalNumberDSAQuestions] = useState(2);
 
   const [errorMesssage, setErrorMessage] = useState({
     role: "assistant",
@@ -377,13 +382,28 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
   });
 
   const onSubmitCodeHandler = async () => {
+    var currentQuestionCount = dsaQuestionCount + 1;
+    setDsaQuestionCount(currentQuestionCount);
+
     var userCode = code;
     var botQuestion = latestBotMessage;
     const result = await handleEvaluateCode("evaluateCode");
     console.log("Dwarak result: ", result);
     console.log("Dwarak json: ", JSON.parse(result));
     setJsonCodeEvaluatedData(JSON.parse(result));
+    const thisQuestionCompleteData = {
+      "dsa_question": botQuestion,
+      "evaluation_data": JSON.parse(result)
+    };
+    setDsaAllQuestionsData([...dsaAllQuestionsData, thisQuestionCompleteData]);
     storeThisDataInFirestore(JSON.parse(result), userCode, botQuestion);
+
+    console.log("Dwarak currentQuestionCount: ", currentQuestionCount);
+    console.log("Dwarak dsaQuestionCount: ", dsaQuestionCount);
+    if (currentQuestionCount == totalNumberDSAQuestions) {
+      console.log("Dwaraka dsaAllQuestionsData: ", dsaAllQuestionsData);
+      setIsDoneWithDSARound(true);
+    }
   };
 
   const storeThisDataInFirestore = async (e, userCode, botQuestion) => {
@@ -465,7 +485,15 @@ const InterviewBot = ({ isThisDSARoundPage, isThisResumeRoundPage }) => {
       <div className="tyn-content">
         <MainNavBar />
         <div className="chat-container">
-          {!startThisRound ? (
+          {isDoneWithDSARound ? (
+            dsaAllQuestionsData.map((questionData) => {
+              return (
+                <CodeEvaluationMetricsAccordian
+                  ratingsData={questionData}
+                />
+              );
+            })
+          ) : !startThisRound ? (
             <ResumeUploadSection
               onTextExtracted={updateExtractedResumeText}
               loading={loading}
