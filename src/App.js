@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import HomePage from "./pages/HomePage/HomePage";
 import InterviewBot from "./pages/InterviewBot/InterviewBot";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import ReportsPage from "./pages/ReportsPage/ReportsPage";
@@ -38,7 +40,8 @@ const App = () => {
     <>
       <ToastContainer />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/landing" element={<LandingPage />} />
         <Route
           path="/interview/intro"
           element={<InterviewBot isThisDSARoundPage={false} isThisResumeRoundPage={false}/>}
