@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InterviewBot from "./pages/InterviewBot/InterviewBot";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import ReportsPage from "./pages/ReportsPage/ReportsPage";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -50,6 +51,7 @@ const App = () => {
           path="/interview/dsaaround"
           element={<InterviewBot isThisDSARoundPage={true} isThisResumeRoundPage={false}/>}
         />
+        <Route path="/reports" element={<ReportsPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot/password" element={<ForgotPassword />} />

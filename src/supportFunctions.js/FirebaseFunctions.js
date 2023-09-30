@@ -163,7 +163,7 @@ export async function fetchDocumentFromFireStore(docRef) {
 export async function fetchUserAllPackData(useruid) {
   try {
     const q = query(
-      collection(fStore, "n-day-pack", useruid, "giftshub"),
+      collection(fStore, "dsa-code-evaluation", useruid, "interviewBot"),
       orderBy("timestamp", "desc")
     );
     const querySnapshot = await getDocs(q);
