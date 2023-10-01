@@ -3,9 +3,10 @@ import React, { useEffect } from "react";
 import Lottie from "react-lottie";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import successAnimation from "../../Images/successAnimation.json";
+import linkedinAnimation from "../../Images/linkedinAnimation.json";
+import MainNavBar from "../../components/MainNavBar";
 import { incrementUserCredits } from "../../supportFunctions.js/FirebaseFunctions";
-export default function PaymentSucess() {
+export default function LinkedinSucess() {
   const dispatch = useDispatch();
   const auth = getAuth();
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function PaymentSucess() {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: successAnimation,
+    animationData: linkedinAnimation,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
@@ -23,7 +24,7 @@ export default function PaymentSucess() {
       if (!user) {
         navigate("/login");
       } else {
-        await incrementUserCredits(user.uid);
+        await incrementUserCredits("linkedin", 100, user.uid);
         setTimeout(() => {
           navigate("/reports");
         }, 1500);
@@ -33,7 +34,7 @@ export default function PaymentSucess() {
 
   return (
     <div>
-      {" "}
+      <MainNavBar />
       <Lottie options={defaultOptions} height={500} width={500} />
     </div>
   );

@@ -23,6 +23,16 @@ export default function ReportsPage() {
     });
   }, [navigate, user]);
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const authorizationCode = searchParams.get('code');
+
+    // Check if the authorizationCode exists before making the API call
+    if (authorizationCode) {
+      // ADD 100 credits to their account 
+    }
+  }, []);
+  
   const getAllInterviewRecords = async (useruid) => {
     setLoading(true);
     fetchUserAllPackData(useruid)
@@ -35,6 +45,10 @@ export default function ReportsPage() {
         setError(error);
       });
   };
+  const linkLinkedinProfile = () => {
+    const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86agn2chxp9rtd&redirect_uri=http://localhost:3000/linkedin/success&scope=openid,profile,email`;
+    window.location.href = authUrl;
+  };
 
   return (
     <div className="landingPage tyn-root">
@@ -42,7 +56,10 @@ export default function ReportsPage() {
       {!loading && (
         <div className="tyn-content">
           <div className="container mt-4">
-            <Link to="https://buy.stripe.com/3csfZj3g25QO6pW3cc" className="btn btm-primary btn-small">Add credits</Link>
+          <Link to="https://buy.stripe.com/3csfZj3g25QO6pW3cc" className="btn btm-primary btn-small">Add credits</Link>
+            <button onClick={()=>{
+              linkLinkedinProfile()
+            }} className="btn btm-secondary btn-small">Add Linked Profile</button>
             <AllRecordsVerticalTabs allInterviewRecords={allInterviewRecords} />
           </div>
         </div>

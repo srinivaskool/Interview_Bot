@@ -8,7 +8,8 @@ import "./App.css";
 import HomePage from "./pages/HomePage/HomePage";
 import InterviewBot from "./pages/InterviewBot/InterviewBot";
 import LandingPage from "./pages/LandingPage/LandingPage";
-import PaymentSucess from "./pages/PaymentSucess/PaymentSucess";
+import LinkedinSuccess from "./pages/LinkedinSuccess/LinkedinSuccess";
+import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
 import ReportsPage from "./pages/ReportsPage/ReportsPage";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import Login from "./pages/auth/Login";
@@ -60,7 +61,8 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot/password" element={<ForgotPassword />} />
         <Route path="/register/complete" element={<Register />} />
-        <Route path="/payment/success" element={<PaymentSucess />} />
+        <Route path="/payment/success" element={<PaymentSuccess />} />
+        <Route path="/linkedin/success" element={<LinkedinSuccess />} />
       </Routes>
     </>
   );

@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import Lottie from "react-lottie";
 import bot1 from "../../Images/TeamImages/bot1.png";
@@ -212,7 +211,6 @@ export default function HomePage() {
                   href="/home-two"
                 >
                   Learn More{" "}
-                  <FontAwesomeIcon icon="fa-solid fa-arrow-right" fa-2xs />
                   {/* <i className="mdi mdi-arrow-right" /> */}
                 </a>
               </div>

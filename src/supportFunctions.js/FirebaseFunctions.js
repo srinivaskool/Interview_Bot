@@ -90,7 +90,7 @@ export async function editDataInRealTimeDatabase(updatedValue, variablePath, rea
   });
 }
 
-export async function incrementUserCredits(userId){
+export async function incrementUserCredits(source, incrementBy, userId){
   return new Promise(async (resolve, reject) => {
     try {
       if (!userId) {
@@ -107,17 +107,27 @@ export async function incrementUserCredits(userId){
         const variablePathObject = {};
         console.log("dwaraka",snapshot.val().credits);
 
-        variablePathObject["credits"] = snapshot.val().credits + 200;
+        if(source == "linkedin"){
+          if(snapshot.val().linkedinLinked){
+            resolve(userId);
+            return
+          } else {
+            variablePathObject["linkedinLinked"] = true;
+          }
+        }
+
+        variablePathObject["credits"] = snapshot.val().credits + incrementBy;
         // Update the specific variable with the updated value
         await update(ref1(db, `${"AllUsersData"}/${userId}`), variablePathObject);
         resolve(userId);
       } else {
         // If the userId does not exist, reject with an error
-        reject(new Error("User ID not found in the database."));
+        console.error("User ID not found in the database.", error);
+        // reject(new Error("User ID not found in the database."));
       }
     } catch (error) {
       console.error("Error editing value:", error);
-      reject(error);
+      // reject(error);
     }
   });
 }
