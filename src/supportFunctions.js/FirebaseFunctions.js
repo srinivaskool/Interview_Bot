@@ -60,6 +60,68 @@ export async function addDataToRealTimeDatabase(data, realTimeDBPath, userId) {
   });
 }
 
+export async function editDataInRealTimeDatabase(updatedValue, variablePath, realTimeDBPath, userId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!userId) {
+        reject(new Error("User ID is required to edit data."));
+        return;
+      }
+
+      // Check if the userId exists in the database
+      const keyRef = child(ref1(db, realTimeDBPath), userId);
+      const snapshot = await get(keyRef);
+
+      if (snapshot.exists()) {
+        // If the userId exists, construct the path to the specific variable
+        const variablePathObject = {};
+        variablePathObject[variablePath] = updatedValue;
+        // Update the specific variable with the updated value
+        await update(ref1(db, `${realTimeDBPath}/${userId}`), variablePathObject);
+        resolve(userId);
+      } else {
+        // If the userId does not exist, reject with an error
+        reject(new Error("User ID not found in the database."));
+      }
+    } catch (error) {
+      console.error("Error editing value:", error);
+      reject(error);
+    }
+  });
+}
+
+export async function incrementUserCredits(userId){
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!userId) {
+        reject(new Error("User ID is required to edit data."));
+        return;
+      }
+
+      // Check if the userId exists in the database
+      const keyRef = child(ref1(db, "AllUsersData"), userId);
+      const snapshot = await get(keyRef);
+
+      if (snapshot.exists()) {
+        // If the userId exists, construct the path to the specific variable
+        const variablePathObject = {};
+        console.log("dwaraka",snapshot.val().credits);
+
+        variablePathObject["credits"] = snapshot.val().credits + 200;
+        // Update the specific variable with the updated value
+        await update(ref1(db, `${"AllUsersData"}/${userId}`), variablePathObject);
+        resolve(userId);
+      } else {
+        // If the userId does not exist, reject with an error
+        reject(new Error("User ID not found in the database."));
+      }
+    } catch (error) {
+      console.error("Error editing value:", error);
+      reject(error);
+    }
+  });
+}
+
 export function getDataFromRealtimeDatabase(realtimeDataPath) {
   const todoRef = ref1(db, realtimeDataPath);
   return new Promise((resolve, reject) => {

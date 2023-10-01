@@ -1,7 +1,7 @@
 import { getAuth } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AllRecordsVerticalTabs from "../../components/AllRecordsVerticalTabs/AllRecordsVerticalTabs";
 import MainNavBar from "../../components/MainNavBar";
 import { fetchUserAllPackData } from "../../supportFunctions.js/FirebaseFunctions";
@@ -42,6 +42,7 @@ export default function ReportsPage() {
       {!loading && (
         <div className="tyn-content">
           <div className="container mt-4">
+            <Link to="https://buy.stripe.com/3csfZj3g25QO6pW3cc" className="btn btm-primary btn-small">Add credits</Link>
             <AllRecordsVerticalTabs allInterviewRecords={allInterviewRecords} />
           </div>
         </div>

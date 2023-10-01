@@ -32,7 +32,7 @@ export const handleGoogleLogin = async (dispatch, navigate, redirectPage) => {
       email: user.email,
       profilepic: user.photoURL,
       displayName: user.displayName,
-      credits: 1000
+      credits: 200
     };
 
     addDataToRealTimeDatabase(data, "AllUsersData", user.uid)
