@@ -16,6 +16,7 @@ import payment from "../../Images/payment.png";
 import wave1 from "../../Images/wave1.png";
 import wave2 from "../../Images/wave2.png";
 import wave3 from "../../Images/wave3.png";
+import { Icon } from '@iconify/react';
 import MainNavBar from "../../components/MainNavBar";
 import "./HomePage.css";
 
@@ -43,6 +44,33 @@ export default function HomePage() {
     setIsHovered3(!isHovered3);
   };
 
+
+  const [isCardHovered1, setIsCardHovered1] = useState(false);
+  const [isCardHovered2, setIsCardHovered2] = useState(false);
+  const [isCardHovered3, setIsCardHovered3] = useState(false);
+  const [isCardHovered4, setIsCardHovered4] = useState(false);
+  const [isCardHovered5, setIsCardHovered5] = useState(false);
+  const [isCardHovered6, setIsCardHovered6] = useState(false);
+
+  const handleCardHover1 = () => {
+    setIsCardHovered1(!isCardHovered1);
+  };
+  const handleCardHover2 = () => {
+    setIsCardHovered2(!isCardHovered2);
+  };
+  const handleCardHover3 = () => {
+    setIsCardHovered3(!isCardHovered3);
+  };
+  const handleCardHover4 = () => {
+    setIsCardHovered4(!isCardHovered4);
+  };
+  const handleCardHover5 = () => {
+    setIsCardHovered5(!isCardHovered5);
+  };
+  const handleCardHover6 = () => {
+    setIsCardHovered6(!isCardHovered6);
+  };
+
   return (
     <div className="home_page">
       <MainNavBar />
@@ -60,14 +88,14 @@ export default function HomePage() {
               <div className="row">
                 <div className="col-lg-8 offset-lg-2 text-white text-center col-lg-8 offset-lg-2">
                   <h1 className="home-title">
-                    We help startups launch their products
+                    Elevate Your Interview Skills with AI
                   </h1>
                   <p className="pt-3 home-desc">
-                    Etiam sed.Interdum consequat proin vestibulum class at.
+                    Master your software interviews with AI-driven mock interviews that offer personalized real-time feedback, and limitless practice to ace your next interview.
                   </p>
                   <p className="play-shadow mt-4">
                     <a className="play-btn video-play-icon" href="/home-two">
-                      <i className="mdi mdi-play text-center" />
+                      <Icon icon="mdi:play" />
                     </a>
                   </p>
                 </div>
@@ -102,116 +130,104 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <br /> <br /> <br />
       <section id="ourservices services" className="section serviceSection">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 offset-lg-2">
-              <h1 className="section-title text-center">Our Services</h1>
+              <h1 className="section-title text-center">We Provide</h1>
               <div className="section-title-border mt-3" />
               <p className="section-subtitle text-muted text-center pt-4 font-secondary">
-                We craft digital, graphic and dimensional thinking, to create
-                category leading brand experiences that have meaning and add a
-                value for our clients.
+                Explore a suite of features designed to help you master software engineering interviews from start to finish.
               </p>
             </div>
           </div>
           <div className="mt-4 row">
             <div className="mt-3 col-lg-4">
-              <div className="services-box text-center hover-effect">
-                <i className="pe-7s-diamond text-primary" />
-                <h4 className="pt-3">Digital Design</h4>
+              <div className="services-box text-center hover-effect" onMouseEnter={handleCardHover1} onMouseLeave={handleCardHover1}>
+                <img src={isCardHovered1 ? 'card1-init-50.png' : 'card1-final-50.png'} />
+                <h4 className="pt-3">Real-Time Feedback</h4>
                 <p className="pt-3 text-muted">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content. Moltin gives you the platform.
+                  Receive instant, AI-generated feedback after every practice session to fine-tune your interview skills on the spot.
                 </p>
               </div>
             </div>
             <div className="mt-3 col-lg-4">
-              <div className="services-box text-center hover-effect">
-                <i className="pe-7s-display2 text-primary" />
-                <h4 className="pt-3">Unlimited Colors</h4>
+              <div className="services-box text-center hover-effect" onMouseEnter={handleCardHover2} onMouseLeave={handleCardHover2}>
+                <img src={isCardHovered2 ? 'card2-init-50.png' : 'card2-final-50.png'} />
+                <h4 className="pt-3">Personalized Insights</h4>
                 <p className="pt-3 text-muted">
-                  Credibly brand standards compliant users without extensible
-                  services. Anibh euismod tincidunt ut laoreet.
+                  Unlock tailored insights that pinpoint your unique strengths and areas for improvement.
                 </p>
               </div>
             </div>
             <div className="mt-3 col-lg-4">
-              <div className="services-box text-center hover-effect">
-                <i className="pe-7s-piggy text-primary" />
-                <h4 className="pt-3">Strategy Solutions</h4>
+              <div className="services-box text-center hover-effect" onMouseEnter={handleCardHover3} onMouseLeave={handleCardHover3}>
+                <img src={!isCardHovered3 ? 'card3-init-50.png' : 'card3-final-50.png'} />
+                <h4 className="pt-3">Customized Practice</h4>
                 <p className="pt-3 text-muted">
-                  Separated they live in Bookmarksgrove right at the coast of
-                  the Semantics, a large language ocean necessary regelialia.
+                  Customize mock interviews to mirror your upcoming interview scenarios, ensuring relevant preparation.
                 </p>
               </div>
             </div>
           </div>
           <div className="mt-4 row">
             <div className="mt-3 col-lg-4">
-              <div className="services-box text-center hover-effect">
-                <i className="pe-7s-science text-primary" />
-                <h4 className="pt-3">Awesome Support</h4>
+              <div className="services-box text-center hover-effect" onMouseEnter={handleCardHover4} onMouseLeave={handleCardHover4}>
+                <img src={!isCardHovered4 ? 'card4-init-50.png' : 'card4-final-50.png'} />
+                <h4 className="pt-3">Resume Analysis</h4>
                 <p className="pt-3 text-muted">
-                  It is a paradisematic country, in which roasted parts of
-                  sentences fly into your mouth leave for the far World.
+                  Get personalized resume reviews and interview questions to match your skills to job requirements.
                 </p>
               </div>
             </div>
             <div className="mt-3 col-lg-4">
-              <div className="services-box text-center hover-effect">
-                <i className="pe-7s-news-paper text-primary" />
-                <h4 className="pt-3">Truly Multipurpose</h4>
+              <div className="services-box text-center hover-effect" onMouseEnter={handleCardHover5} onMouseLeave={handleCardHover5}>
+                <img src={!isCardHovered5 ? 'card5-init-50.png' : 'card5-final-50.png'} />
+                <h4 className="pt-3">Comprehensive Interview Simulation</h4>
                 <p className="pt-3 text-muted">
-                  Even the all-powerful Pointing has no control about the blind
-                  texts it is an almost unorthographic.
+                  Practice full interviews, including technical questions, resume reviews, and DSA / SD problems.
                 </p>
               </div>
             </div>
             <div className="mt-3 col-lg-4">
-              <div className="services-box text-center hover-effect">
-                <i className="pe-7s-plane text-primary" />
-                <h4 className="pt-3">Easy to customize</h4>
+              <div className="services-box text-center hover-effect" onMouseEnter={handleCardHover6} onMouseLeave={handleCardHover6}>
+                <img src={!isCardHovered6 ? 'card6-init-50.png' : 'card6-final-50.png'} />
+                <h4 className="pt-3">Interviewer Cross-Questioning</h4>
                 <p className="pt-3 text-muted">
-                  Question Marks and devious Semikoli, but the Little Blind Text
-                  didn’t listen. She packed her seven versalia.
+                  Hone your problem-solving with AI Interviewer cross-questioning under pressure.
                 </p>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </section >
       <section id="interviewlotteanimaiton features" className="section bg-light iphoneSection" >
         <div className="container">
           <div className="vertical-content row">
             <div className="col-lg-5">
               <div className="features-box">
                 <h3>
-                  A digital web design studio creating modern &amp; engaging
-                  online experiences
+                  Unleash Your Interview Potential
                 </h3>
                 <p className="text-muted web-desc">
-                  Separated they live in Bookmarksgrove right at the coast of
-                  the Semantics, a large language ocean. A small river named
-                  Duden flows by their place and supplies it with the necessary
-                  regelialia.
+                  We revolutionize interview preparation with AI-driven mock interviews. Elevate your skills and help you ace your next software engineering interview.
                 </p>
                 <ul className="text-muted list-unstyled mt-4 features-item-list">
-                  <li className="">We put a lot of effort in design.</li>
+                  <li className="">Instant, AI-generated feedback for real-time improvement.</li>
                   <li className="">
-                    The most important ingredient of successful website.
+                    Tailored insights pinpoint unique strengths and weaknesses.
                   </li>
                   <li className="">
-                    Sed ut perspiciatis unde omnis iste natus error sit.
+                    Customize practice to match your interview scenario.
                   </li>
-                  <li className="">Submit Your Organization.</li>
+                  <li className="">Challenge yourself with real-world interview simulation.</li>
                 </ul>
                 <a
                   className="btn btn-primary mt-4 waves-effect waves-light"
                   href="/home-two"
                 >
-                  Learn More{" "}
-                  {/* <i className="mdi mdi-arrow-right" /> */}
+                  Get started{" "}
                 </a>
               </div>
             </div>
@@ -237,16 +253,17 @@ export default function HomePage() {
         <div className="container">
           <div className="row">
             <div className="text-center col-lg-12">
-              <h2 className="text-white">Build your dream website today</h2>
+              <h2 className="text-white"> AI-Powered Wisdom, Humanized Approach.
+              </h2>
               <p className="pt-3 home-desc">
-                But nothing the copy said could convince her and so it didn’t
-                take long until a few insidious Copy Writers ambushed her.
+                Why settle for less? Select an interview partner who embodies vast knowledge and unbiased evaluation.
+                Leave mediocrity behind, opt for AI, your superior interviewer with unmatched knowledge and precision.
               </p>
               <a
                 className="btn btn-white mt-4 waves-effect waves-light mb-5"
                 href="/home-two"
               >
-                View Plan &amp; Pricing
+                Level Up
               </a>
             </div>
           </div>
@@ -339,45 +356,47 @@ export default function HomePage() {
         <div className="container">
           <div className="row">
             <div className="col-lg-8 offset-lg-2">
-              <h1 className="section-title text-center">WORK PROCESS</h1>
+              <h1 className="section-title text-center">INTERVIEW PROCESS</h1>
               <div className="section-title-border mt-3" />
               <p className="section-subtitle text-muted text-center pt-4 font-secondary">
-                In an ideal world this website wouldn’t exist, a client would
-                acknowledge the importance of having web copy before the Proin
-                vitae ipsum vel ex finibus semper design starts.
+                Our interview process is designed to mimic a real software engineering interview, providing a comprehensive and effective preparation experience.
               </p>
             </div>
           </div>
           <div className="row">
             <div className="text-center process-left-icon-1 col-lg-6">
-              <i className="pe-7s-angle-right" />
+
             </div>
             <div className="text-center process-left-icon-2 col-lg-6">
-              <i className="pe-7s-angle-right" />
+
             </div>
           </div>
+
           <div className="mt-5 row">
             <div className="plan-line col-lg-4">
               <div className="text-center process-box">
-                <i className="pe-7s-pen text-primary" />
-                <h4 className="pt-3">Tell us what you need</h4>
+                <br />
+                <img src='cv.png' />
+                <h4 className="pt-3">Personalized Resume Introduction</h4>
                 <p className="text-muted">
-                  The Big Oxmox advised her not to do so.
+                  Your story, your skills, your potential.
                 </p>
               </div>
             </div>
             <div className="plan-line col-lg-4">
               <div className="text-center process-box">
-                <i className="pe-7s-id text-primary" />
-                <h4 className="pt-3">Get free quotes</h4>
-                <p className="text-muted">Little Blind Text didn’t listen.</p>
+                <br />
+                <img src='theory.png' />
+                <h4 className="pt-3">Theoretical Proficiency Assessment</h4>
+                <p className="text-muted">Testing your conceptual understanding.</p>
               </div>
             </div>
             <div className="col-lg-4">
               <div className="text-center process-box">
-                <i className="pe-7s-target text-primary" />
-                <h4 className="pt-3">Deliver high quality product</h4>
-                <p className="text-muted">When she reached the first hills.</p>
+                <br />
+                <img src='dsa.png' />
+                <h4 className="pt-3">DSA Mastery Assessment</h4>
+                <p className="text-muted">Prove your algorithmic skills.</p>
               </div>
             </div>
             <div className="text-center mx-auto">
@@ -385,14 +404,14 @@ export default function HomePage() {
                 className="btn btn-primary waves-light waves-effect mt-5"
                 href="/home-two"
               >
-                Get Started <i className="mdi mdi-arrow-right" />
+                Get Started <Icon icon="mdi:arrow-right" />
               </a>
             </div>
           </div>
         </div>
       </section>
       <section
-      id="letsgetstarted"
+        id="letsgetstarted"
         className="section section-lg bg-get-start iphoneSection"
         style={{
           backgroundImage: `url(${bgImg2})`,
@@ -405,18 +424,18 @@ export default function HomePage() {
           <div className="row">
             <div className="text-center col-lg-8 offset-lg-2">
               <h1 className="get-started-title text-white">
-                Let's Get Started
+                Resume Analysis and Enhancement
               </h1>
               <div className="section-title-border mt-4 bg-white" />
               <p className="section-subtitle font-secondary text-white text-center pt-4">
-                Far far away, behind the word mountains, far from the countries
-                Vokalia and Consonantia, there live the blind texts.{" "}
+                Discover your strengths, identify weaknesses, and receive actionable suggestions for improvement. Compare your resume to job descriptions, and get personalized recommendations to align perfectly with your dream job.
               </p>
               <a
                 className="btn btn-white waves-effect mt-3 mb-4"
-                href="/home-two"
+                href="https://interview-ai.streamlit.app/"
+                target="_blank"
               >
-                Get Started <i className="mdi mdi-arrow-right" />{" "}
+                Evaluate yours now
               </a>
             </div>
           </div>
@@ -425,9 +444,16 @@ export default function HomePage() {
           <img src={bgPatternLight} alt="pattern" />
         </div>
       </section>
+      <br /><br /><br />
       <section id="ourteam" className="mb-5 mt-3 text-center container">
-        <div className="row">
-          <h1>Our Team</h1>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-8 offset-lg-2">
+              <h1 className="section-title text-center">BUILT BY</h1>
+              <div className="section-title-border mt-3" />
+              <br /><br />
+            </div>
+          </div>
         </div>
         <div className="row mt-2">
           {/* Column 1*/}
@@ -506,7 +532,7 @@ export default function HomePage() {
                 />
               </div>
               <h3>AI Bot</h3>
-              <p>I am everything</p>
+              <p>I run the show! They? Clueless 😜</p>
               <div className="icons">
                 <a href="#">
                   <i className="fab fa-twitter" />
@@ -525,6 +551,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <br /><br /><br />
       <footer className="footer section">
         <div className="bg-overlay" />
         <div className="container">
@@ -624,6 +651,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
