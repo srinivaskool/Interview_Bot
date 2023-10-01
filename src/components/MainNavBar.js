@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getAuth } from "firebase/auth";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -11,6 +11,7 @@ export default function MainNavBar() {
   let dispatch = useDispatch();
   let location = useLocation();
   let navigate = useNavigate();
+  const [navFixed, setnavFixed] = useState(false);
 
   function updateRedirectRedux(destination) {
     console.log("Dwaraka-yayyy: ", destination);
@@ -22,6 +23,17 @@ export default function MainNavBar() {
     window.location.reload();
   }
 
+  useEffect(() => {
+    window.addEventListener("scroll", changeBackground);
+  }, []);
+  const changeBackground = () => {
+    if (window.scrollY >= 100) {
+      setnavFixed(true);
+    } else {
+      setnavFixed(false);
+    }
+  };
+  
   let { user } = useSelector((state) => ({ ...state }));
   const logout = async () => {
     try {
@@ -45,10 +57,10 @@ export default function MainNavBar() {
     }
   };
   return (
-    <div>
+    <div className={`${navFixed && "is-sticky"}`}>
       {" "}
-      <nav className="tyn-appbar">
-        <div className="tyn-appbar-wrap">
+      <nav className="tyn-appbar ">
+        <div className="tyn-appbar-wrap container">
           <div className="tyn-appbar-logo">
             <Link className="tyn-logo" to="/">
               <svg
@@ -136,7 +148,7 @@ export default function MainNavBar() {
               </li>
             </ul>
             {/* .tyn-appbar-nav */}
-            <ul className="tyn-appbar-nav tyn-appbar-nav-end">
+            <ul className="tyn-appbar-nav tyn-appbar-nav-end pe-5">
               <li className="tyn-appbar-item nav-item dropdown">
                 <Link
                   className="d-inline-flex nav-link "
@@ -157,7 +169,7 @@ export default function MainNavBar() {
                     />
                   </div>
                 </Link>
-                <div className="dropdown-menu dropdown-menu-end">
+                <div className="dropdown-menu dropdown-menu-end mt-3">
                   {user ? (
                     <>
                       {" "}

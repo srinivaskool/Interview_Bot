@@ -39,7 +39,7 @@ const LandingPage = () => {
                   </div>
                   <div className="tyn-section-content">
                     <div className="row g-4 justify-content-center">
-                      <div className="col-xl-3 col-lg-4 col-sm-6">
+                      <div className="col-xl-3 col-lg-4 col-sm-6 hover-effect">
                         <div className="card h-100 border-0">
                           <div className="card-body p-4">
                             <div className="text-muted text-opacity-50 fs-7 mt-n2 fw-medium">
@@ -119,7 +119,7 @@ const LandingPage = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-3 col-lg-4 col-sm-6">
+                      <div className="col-xl-3 col-lg-4 col-sm-6 hover-effect">
                         <div className="card h-100 border-0">
                           <div className="card-body p-4">
                             <div className="text-primary fs-7 mt-n2 fw-medium">
@@ -199,7 +199,7 @@ const LandingPage = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-3 col-lg-4">
+                      <div className="col-xl-3 col-lg-4 col-sm-6 hover-effect">
                         <div className="card h-100 border-0">
                           <div className="card-body p-4">
                             <div className="text-success fs-7 mt-n2 fw-medium">
