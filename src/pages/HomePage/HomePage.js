@@ -279,9 +279,7 @@ export default function HomePage() {
               <h1 className="section-title text-center">WHAT THEY'VE SAID</h1>
               <div className="section-title-border mt-3" />
               <p className="section-subtitle text-muted text-center pt-4 font-secondary">
-                The Big Oxmox advised her not to do so, because there were
-                thousands of bad Commas, wild Question Marks and devious
-                pulvinar metus molestie sed Semikoli.
+                Discover the impact of EvaluAItor through the words of our satisfied users. Hear from those who've succeeded with EvaluAItor. Discover how our platform transformed their interview experiences and careers.
               </p>
             </div>
           </div>
@@ -289,63 +287,54 @@ export default function HomePage() {
             <div className="col-lg-4">
               <div className="testimonial-box hover-effect mt-4">
                 <img
-                  src="http://dorsin.react.themesbrand.com/assets/images/testimonials/user-2.jpg"
+                  src="t1.jpeg"
                   alt="client"
                   className="img-fluid d-block img-thumbnail rounded-circle"
                 />
                 <div className="testimonial-decs">
                   <p className="text-muted text-center mb-0">
-                    “I feel confident imposing change on myself. It's a lot more
-                    fun progressing than looking back. That's why scelerisque
-                    pretium dolor, sit amet vehicula erat pelleque need throw
-                    curve balls.”{" "}
+                    “It's a game-changer for mastering software engineering interviews. Thanks to EvaluAItor which made interviews less daunting.”{" "}
                   </p>
                 </div>
                 <h5 className="text-center text-uppercase pt-3">
-                  RUBEN REED -{" "}
-                  <span className="text-muted text-capitalize">Charleston</span>
+                  Kotikalapudi Karthik -{" "}
+                  <span className="text-muted text-capitalize">Flipkart</span>
                 </h5>
               </div>
             </div>
             <div className="col-lg-4">
               <div className="testimonial-box hover-effect mt-4">
                 <img
-                  src="http://dorsin.react.themesbrand.com/assets/images/testimonials/user-1.jpg"
+                  src="t2.jpeg"
                   alt="client"
                   className="img-fluid d-block img-thumbnail rounded-circle"
                 />
                 <div className="testimonial-decs">
                   <p className="text-muted text-center mb-0">
-                    “Our task must be to free ourselves by widening our circle
-                    of compassion to embrace all living creatures Integer varius
-                    lacus non magna tempor congue natuasre the whole its
-                    beauty.”{" "}
+                    “Unmatched guidance and insights! Personalized feedback boosted my confidence. Thanks, EvaluAItor for guiding me!”{" "}
                   </p>
                 </div>
                 <h5 className="text-center text-uppercase pt-3">
-                  MICHAEL P. HOWLETT -{" "}
-                  <span className="text-muted text-capitalize">Worcester</span>
+                  Rikil Gajarla -{" "}
+                  <span className="text-muted text-capitalize">Amazon</span>
                 </h5>
               </div>
             </div>
             <div className="col-lg-4">
               <div className="testimonial-box hover-effect mt-4">
                 <img
-                  src="http://dorsin.react.themesbrand.com/assets/images/testimonials/user-3.jpg"
+                  src="t3.jpeg"
                   alt="client"
                   className="img-fluid d-block img-thumbnail rounded-circle"
                 />
                 <div className="testimonial-decs">
                   <p className="text-muted text-center mb-0">
-                    “I've learned that people will forget what you said, people
-                    will forget what you did, but people will never aliquam in
-                    nunc quis tincidunt forget how you vestibulum egestas them
-                    feel.”{" "}
+                    “This website turned my interview fears into confidence. I aced the technical & DSA questions and landed my dream job! ”{" "}
                   </p>
                 </div>
                 <h5 className="text-center text-uppercase pt-3">
-                  THERESA D. SINCLAIR -{" "}
-                  <span className="text-muted text-capitalize">Lynchburg</span>
+                  Sumedha Acharya  -{" "}
+                  <span className="text-muted text-capitalize">Google</span>
                 </h5>
               </div>
             </div>
